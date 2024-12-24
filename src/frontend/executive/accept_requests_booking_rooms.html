@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Approval Dashboard</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+
+    <!-- ย้าย executive.css มาไว้ใน <style> -->
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+      }
+      .container {
+        display: flex;
+        /* height: 100vh; ถ้าต้องการเต็มจอสูงสุด */
+      }
+
+      .notification-btn {
+        position: relative;
+        display: inline-block;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 16px;
+        font-family: Arial, sans-serif;
+      }
+      .notification-badge {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background-color: red;
+        color: white;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: bold;
+        border: 2px solid white;
+      }
+
+      .main-content {
+        margin-left: 20%;
+        margin-top: 3%;
+        margin-bottom: 5%;
+        flex: 1;
+        padding: 20px;
+        padding-top: 2px;
+        background-color: #e8e8e8;
+        border-radius: 10px;
+      }
+
+      .tab-bar {
+        display: flex;
+        padding: 10px;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 10px;
+      }
+      .tab {
+        padding: 15px 20px;
+        cursor: pointer;
+        font-weight: bold;
+        color: #555;
+        text-align: center;
+      }
+      .tab.active {
+        color: #000;
+        border-bottom: 2px solid #000;
+      }
+      .tab-bar button.active {
+        background-color: #f5f5f5;
+        border: 1px solid #ccc;
+        font-weight: bold;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th {
+        text-align: center;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+      }
+      td {
+        text-align: center;
+      }
+
+      .actions {
+        display: flex;
+        gap: 10px;
+      }
+      .actions button {
+        padding: 5px 10px;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+      .actions2 {
+        text-align: center;
+        gap: 10px;
+      }
+      .actions2 button {
+        padding: 5px 10px;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+
+      .approve {
+        background-color: #4caf50;
+        color: white;
+      }
+      .reject {
+        background-color: #ff0606;
+        color: white;
+      }
+      .icon-button {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .receive {
+        justify-content: center;
+      }
+      .tab a {
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .dropdown-container {
+        display: inline-block;
+        position: relative;
+        font-family: Arial, sans-serif;
+        margin-left: auto;
+      }
+      select {
+        width: 135px;
+        padding: 10px;
+        font-size: 14px;
+        color: #7e7e7e;
+        border: 1px solid #e7e7e7;
+        border-radius: 8px;
+        background-color: #f9fbff;
+        outline: none;
+        cursor: pointer;
+      }
+      select:focus {
+        border-color: #aaa;
+      }
+
+      /* ทำให้ Sidebar Responsive */
+      @media (max-width: 992px) {
+        .main-content {
+          margin-left: 0;
+          margin-top: 120px; /* เว้นที่ให้ sidebar ด้านบน */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div id="sidebar-container"></div>
+      <div class="main-content">
+        <div class="tab-bar">
+          <div class="tab">
+            <a href="booking_rooms_requests.html">คำขอ(10)</a>
+          </div>
+          <div class="tab active"><a href="#">อนุมัติ (5)</a></div>
+          <div class="tab">
+            <a href="not_accept_requests_booking_rooms.html">ไม่อนุมัติ (4)</a>
+          </div>
+          <div class="dropdown-container">
+            <select id="sorttime">
+              <option value="oldest">เวลาเก่าที่สุด</option>
+              <option value="newest">เวลาใหม่ที่สุด</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- ครอบด้วย .table-responsive -->
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th style="color: #929292">
+                  วันที่
+                  <i
+                    class="bi bi-caret-down-fill"
+                    style="
+                      margin-left: 5px;
+                      cursor: pointer;
+                      color: #929292;
+                      font-size: 10px;
+                    "
+                    onclick="toggleCalendar()"
+                  ></i>
+                </th>
+                <div
+                  id="dropdown-calendar"
+                  style="
+                    display: none;
+                    position: absolute;
+                    background: white;
+                    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+                    border-radius: 5px;
+                    padding: 10px;
+                  "
+                >
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: space-between;
+                      margin-bottom: 10px;
+                    "
+                  >
+                    <select
+                      id="month-select"
+                      onchange="renderCustomCalendar()"
+                    ></select>
+                    <select
+                      id="year-select"
+                      onchange="renderCustomCalendar()"
+                    ></select>
+                  </div>
+                  <div id="custom-calendar"></div>
+                </div>
+
+                <script>
+                  const currentDate = new Date();
+
+                  function toggleCalendar() {
+                    const calendar =
+                      document.getElementById("dropdown-calendar");
+                    if (
+                      calendar.style.display === "none" ||
+                      calendar.style.display === ""
+                    ) {
+                      calendar.style.display = "block";
+                      initializeCalendar();
+                    } else {
+                      calendar.style.display = "none";
+                    }
+                  }
+
+                  document.addEventListener("click", function (event) {
+                    const calendar =
+                      document.getElementById("dropdown-calendar");
+                    const iconElement = document.querySelector(
+                      "i.bi-caret-down-fill"
+                    );
+                    if (
+                      !calendar.contains(event.target) &&
+                      event.target !== iconElement
+                    ) {
+                      calendar.style.display = "none";
+                    }
+                  });
+
+                  function initializeCalendar() {
+                    const monthSelect = document.getElementById("month-select");
+                    const yearSelect = document.getElementById("year-select");
+
+                    // Populate months
+                    monthSelect.innerHTML = "";
+                    const monthNames = [
+                      "January",
+                      "February",
+                      "March",
+                      "April",
+                      "May",
+                      "June",
+                      "July",
+                      "August",
+                      "September",
+                      "October",
+                      "November",
+                      "December",
+                    ];
+                    monthNames.forEach((month, index) => {
+                      const option = document.createElement("option");
+                      option.value = index;
+                      option.text = month;
+                      if (index === currentDate.getMonth())
+                        option.selected = true;
+                      monthSelect.appendChild(option);
+                    });
+
+                    // Populate years
+                    yearSelect.innerHTML = "";
+                    const startYear = currentDate.getFullYear() - 10;
+                    const endYear = currentDate.getFullYear() + 50;
+                    for (let year = startYear; year <= endYear; year++) {
+                      const option = document.createElement("option");
+                      option.value = year;
+                      option.text = year;
+                      if (year === currentDate.getFullYear())
+                        option.selected = true;
+                      yearSelect.appendChild(option);
+                    }
+
+                    renderCustomCalendar();
+                  }
+
+                  function renderCustomCalendar() {
+                    const calendarDiv =
+                      document.getElementById("custom-calendar");
+                    calendarDiv.innerHTML = ""; // Clear existing
+
+                    const selectedMonth = parseInt(
+                      document.getElementById("month-select").value
+                    );
+                    const selectedYear = parseInt(
+                      document.getElementById("year-select").value
+                    );
+
+                    const daysInMonth = new Date(
+                      selectedYear,
+                      selectedMonth + 1,
+                      0
+                    ).getDate();
+                    const firstDay = new Date(
+                      selectedYear,
+                      selectedMonth,
+                      1
+                    ).getDay();
+
+                    const calendarTable = document.createElement("table");
+                    calendarTable.style.borderCollapse = "collapse";
+                    calendarTable.style.width = "100%";
+
+                    const headerRow = document.createElement("tr");
+                    ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].forEach(
+                      (day) => {
+                        const th = document.createElement("th");
+                        th.style.textAlign = "center";
+                        th.innerText = day;
+                        headerRow.appendChild(th);
+                      }
+                    );
+                    calendarTable.appendChild(headerRow);
+
+                    let date = 1;
+                    for (let i = 0; i < 6; i++) {
+                      const row = document.createElement("tr");
+                      for (let j = 0; j < 7; j++) {
+                        const cell = document.createElement("td");
+                        cell.style.textAlign = "center";
+                        cell.style.padding = "5px";
+                        cell.style.border = "1px solid #ddd";
+                        if (i === 0 && j < firstDay) {
+                          cell.innerText = "";
+                        } else if (date > daysInMonth) {
+                          break;
+                        } else {
+                          cell.innerText = date;
+                          cell.style.cursor = "pointer";
+                          cell.onclick = function () {
+                            document.getElementById(
+                              "dropdown-calendar"
+                            ).style.display = "none";
+                          };
+                          date++;
+                        }
+                        row.appendChild(cell);
+                      }
+                      calendarTable.appendChild(row);
+                    }
+                    calendarDiv.appendChild(calendarTable);
+                  }
+                </script>
+                <th style="color: #929292">ชื่อ-นามสกุล</th>
+                <th style="color: #929292">อีเมล</th>
+                <th style="color: #929292">
+                  ตำแหน่ง
+                  <div class="dropdown d-inline">
+                    <i
+                      class="bi bi-caret-down-fill"
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                      style="color: #929292; font-size: 10px"
+                    ></i>
+                    <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="#">นิสิต</a></li>
+                      <li><a class="dropdown-item" href="#">อาจารย์</a></li>
+                    </ul>
+                  </div>
+                </th>
+                <th style="color: #929292">
+                  ห้อง
+                  <div class="dropdown d-inline">
+                    <i
+                      class="bi bi-caret-down-fill"
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                      style="color: #929292; font-size: 10px"
+                    ></i>
+                    <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="#">SC2-211</a></li>
+                      <li><a class="dropdown-item" href="#">SC2-212</a></li>
+                      <li><a class="dropdown-item" href="#">SC2-307</a></li>
+                      <li><a class="dropdown-item" href="#">SC2-308</a></li>
+                      <li><a class="dropdown-item" href="#">SC2-311</a></li>
+                      <li><a class="dropdown-item" href="#">SC2-313</a></li>
+                      <li><a class="dropdown-item" href="#">SC2-313-1</a></li>
+                      <li><a class="dropdown-item" href="#">SC2-314</a></li>
+                      <li><a class="dropdown-item" href="#">SC2-407</a></li>
+                      <li><a class="dropdown-item" href="#">SC2-408</a></li>
+                      <li><a class="dropdown-item" href="#">SC2-411</a></li>
+                      <li><a class="dropdown-item" href="#">SC2-413</a></li>
+                      <li><a class="dropdown-item" href="#">SC2-414</a></li>
+                      <li><a class="dropdown-item" href="#">SC2-415</a></li>
+                    </ul>
+                  </div>
+                </th>
+                <th style="color: #929292">เวลาจอง</th>
+                <th style="color: #929292">เอกสาร</th>
+                <th style="color: #929292">สถานะ</th>
+                <th style="color: #929292">ยกเลิกการอนุมัติ</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- ตัวอย่างข้อมูล -->
+              <tr>
+                <td>2567-11-30</td>
+                <td>นายสายฝน คุณเกียรติ</td>
+                <td>saifon@nu.ac.th</td>
+                <td>อาจารย์</td>
+                <td>sc2-307</td>
+                <td>จ. 17:00 - 21:00</td>
+                <td class="text-center">
+                  <i class="bi bi-file-earmark-pdf"></i>
+                </td>
+                <td class="actions2">
+                  <i style="color: #afafaf">อนุมัติแล้ว</i>
+                </td>
+                <td class="actions receive">
+                  <button
+                    class="btn btn-outline-danger"
+                    style="border: 1px solid red"
+                  >
+                    <i class="bi bi-x-circle"></i> ยกเลิก
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>2567-11-25</td>
+                <td>นายคำมี สาเก</td>
+                <td>kammee@nu.ac.th</td>
+                <td>นิสิต</td>
+                <td>sc2-414</td>
+                <td>.พ 15.00 - 22.00</td>
+                <td class="text-center">
+                  <i class="bi bi-file-earmark-pdf"></i>
+                </td>
+                <td class="actions2">
+                  <i style="color: #afafaf">อนุมัติแล้ว</i>
+                </td>
+                <td class="actions receive">
+                  <button
+                    class="btn btn-outline-danger"
+                    style="border: 1px solid red"
+                  >
+                    <i class="bi bi-x-circle"></i> ยกเลิก
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>2567-11-23</td>
+                <td>นางสาวอุ้งอิ้ง องค์กร</td>
+                <td>unging67@nu.ac.th</td>
+                <td>นิสิต</td>
+                <td>sc2-308</td>
+                <td>จ. 19.00 - 21.00</td>
+                <td class="text-center">
+                  <i class="bi bi-file-earmark-pdf"></i>
+                </td>
+                <td class="actions2">
+                  <i style="color: #afafaf">อนุมัติแล้ว</i>
+                </td>
+                <td class="actions receive">
+                  <button
+                    class="btn btn-outline-danger"
+                    style="border: 1px solid red"
+                  >
+                    <i class="bi bi-x-circle"></i> ยกเลิก
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>2567-11-20</td>
+                <td>นายธีรพงศ์ พาสุข</td>
+                <td>theerapong66@nu.ac.th</td>
+                <td>นิสิต</td>
+                <td>sc2-407</td>
+                <td>ศ. 17.00 - 20.00</td>
+                <td class="text-center">
+                  <i class="bi bi-file-earmark-pdf"></i>
+                </td>
+                <td class="actions2">
+                  <i style="color: #afafaf">อนุมัติแล้ว</i>
+                </td>
+                <td class="actions receive">
+                  <button
+                    class="btn btn-outline-danger"
+                    style="border: 1px solid red"
+                  >
+                    <i class="bi bi-x-circle"></i> ยกเลิก
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>2567-11-18</td>
+                <td>นางสาวปรานิศรา สายมาก</td>
+                <td>pranisara@nu.ac.th</td>
+                <td>อาจารย์</td>
+                <td>sc2-408</td>
+                <td>พ. 16.00 - 21.00</td>
+                <td class="text-center">
+                  <i class="bi bi-file-earmark-pdf"></i>
+                </td>
+                <td class="actions2">
+                  <i style="color: #afafaf">อนุมัติแล้ว</i>
+                </td>
+                <td class="actions receive">
+                  <button
+                    class="btn btn-outline-danger"
+                    style="border: 1px solid red"
+                  >
+                    <i class="bi bi-x-circle"></i> ยกเลิก
+                  </button>
+                </td>
+              </tr>
+              <!-- ใส่ข้อมูลเพิ่มตามต้องการ -->
+            </tbody>
+          </table>
+        </div>
+        <!-- /table-responsive -->
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      fetch("sidebar.html")
+        .then((resp) => resp.text())
+        .then((html) => {
+          document.getElementById("sidebar-container").innerHTML = html;
+        })
+        .then(() => {
+          // highlight ปุ่ม "คำขออนุมัติการจองห้อง"
+          const btnStats = document.getElementById("btnReceive");
+          btnStats.classList.add("btn-sidebar-active");
+        })
+        .catch((err) => console.error("Failed to load sidebar:", err));
+    </script>
+  </body>
+</html>
