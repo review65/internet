@@ -1,3 +1,6 @@
+.body{
+    background-color: white;
+}
 .container {
     width: 80%;
     /* Container width */
@@ -19,6 +22,9 @@
     position: relative;
     /* ตั้งค่า relative เพื่อใช้กับตำแหน่ง absolute */
     cursor: pointer;
+}
+.chart{
+    margin-top: 30px;
 }
 
 .most-room {
@@ -62,32 +68,6 @@
     /* เพิ่มระยะห่างระหว่าง <p> กับ <img> */
 }
 
-.container .box-it,
-.container .box-com,
-.container .box-total {
-    display: inline-block;
-    /* ให้กล่องอยู่ในบรรทัดเดียวกัน */
-    width: 20px;
-    height: 20px;
-    border: 1px solid #000000;
-    margin-left: 5px;
-    /* Space between the boxes */
-}
-
-.container .box-it {
-    background-color: #622b86;
-    color: #622b86;
-}
-
-.container .box-com {
-    background-color: #E54715;
-    color: #E54715;
-}
-
-.container .box-total {
-    background-color: #E5D2ba;
-    color: #E5D2ba;
-}
 
 .container-two {
     width: 90%;
@@ -101,6 +81,7 @@
     display: flex;
     border-radius: 20px;
     justify-content: space-between;
+    margin: auto;
 
 }
 
@@ -251,7 +232,7 @@
     display: flex;
     border-radius: 20px;
     justify-content: space-between;
-
+    padding-bottom: 60px;
 }
 
 .container-three section {
@@ -280,48 +261,9 @@
     /* จัดแนวนอนให้อยู่กลาง */
     justify-content: flex-start;
     /* เนื้อหาอยู่ด้านบน */
-    height: 100%;
+    height: auto;
     /* กำหนดความสูงเพื่อให้ปุ่มติดล่าง */
-    padding-bottom: 20px;
-}
-
-.container-three .box1 {
-    display: inline-block;
-    border: 1px solid #000000;
-    width: 10px;
-    height: 10px;
-    background-color: #344BFD;
-    color: #622b86;
-    vertical-align: middle;
-    /* จัดแนวตั้งให้อยู่ในแนวเดียวกัน */
-    margin-top: 0;
-    /* ลบ margin-top ที่อาจทำให้เกิดระยะห่าง */
-}
-
-.container-three .box2 {
-    display: inline-block;
-    border: 1px solid #000000;
-    width: 10px;
-    height: 10px;
-    background-color: #F4A79D;
-    color: #622b86;
-    vertical-align: middle;
-    /* จัดแนวตั้งให้อยู่ในแนวเดียวกัน */
-    margin-top: 0;
-    /* ลบ margin-top ที่อาจทำให้เกิดระยะห่าง */
-}
-
-.container-three .box3 {
-    display: inline-block;
-    border: 1px solid #000000;
-    width: 10px;
-    height: 10px;
-    background-color: #FF0000;
-    color: #622b86;
-    vertical-align: middle;
-    /* จัดแนวตั้งให้อยู่ในแนวเดียวกัน */
-    margin-top: 0;
-    /* ลบ margin-top ที่อาจทำให้เกิดระยะห่าง */
+    padding-bottom: 60px;
 }
 
 .container-three .equipment button {
@@ -330,22 +272,14 @@
     color: white;
     border-radius: 5px;
     padding: 10px 20px;
-    /* ระยะห่างภายในปุ่ม */
     font-size: 16px;
-    /* ขนาดตัวอักษร */
     border: none;
-    /* ลบเส้นขอบ */
     cursor: pointer;
-    /* เปลี่ยนเคอร์เซอร์เป็น pointer */
     position: absolute;
-    /* ใช้ absolute positioning */
-    bottom: 20px;
-    /* ระยะห่างจากด้านล่าง */
+    bottom: 10px; /* ปุ่มจะอยู่ด้านล่างของ container */
     left: 50%;
-    /* จัดให้อยู่กึ่งกลางแนวนอน */
     transform: translateX(-50%);
-    /* ปรับให้อยู่ตรงกลาง */
-
+   
 }
 
 .container-three .moststuden-container button {
@@ -365,7 +299,7 @@
 }
 
 .moststuden-container {
-    width: 80%; /* กำหนดความกว้าง */
+    width: auto; /* กำหนดความกว้าง */
     margin: auto; /* จัดให้อยู่ตรงกลาง */
     padding: 20px; /* ระยะห่างภายใน */
     border: 1px solid #000000; /* กรอบเส้น */
@@ -388,11 +322,12 @@
 
 .split-container {
     display: flex;
-    justify-content: space-between; /* ให้ข้อความอยู่ซ้ายและขวา */
-    align-items: center; /* จัดให้อยู่ในแนวตั้งกลาง */
-    width: 100%; /* ให้ div ขยายเต็มความกว้าง */
-}
-
-.split-container p {
-    margin: 5px 0; /* เพิ่มระยะห่างระหว่าง <p> */
+    justify-content: space-between; /* ทำให้ p3 อยู่ซ้ายและ p4 อยู่ขวา */
+    align-self:center;
+    margin-bottom: 10px; /* เพิ่มระยะห่างระหว่างแถว */
+  }
+  
+.p3,.p4{
+    margin: 0; /* ลบ margin ของ p3 และ p4 */
+  padding: 0; /* ลบ padding ของ p3 และ p4 */
 }
