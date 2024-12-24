@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <title>รายการอุปกรณ์ชำรุด</title>
+    <!-- Bootstrap 5 Bundle CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+
+      /* ขนาด Main Content ให้เท่ากับอีกหน้า (margin-left: 290px) */
+      .content-area {
+        margin-left: 290px; /* เว้นที่สำหรับ Sidebar */
+      }
+      /* Responsive: จอเล็ก */
+      @media (max-width: 576px) {
+        .sidebar {
+          position: relative;
+          width: 100%;
+          max-width: 100%;
+          box-shadow: none;
+        }
+        .content-area {
+          margin-left: 0;
+        }
+      }
+
+      /* สไตล์เพิ่มเติมสำหรับพื้นที่ Filter */
+      .filter-row {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+      }
+      .filter-row label {
+        margin-right: 0.5rem;
+        font-weight: bold;
+      }
+      .filter-row select {
+        width: auto;
+        display: inline-block;
+        margin-right: 1rem;
+      }
+      .filter-row input[type="date"] {
+        width: auto;
+        display: inline-block;
+        margin-right: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- นำเข้า Sidebar -->
+    <div id="sidebar-container"></div>
+
+    <!-- พื้นที่เนื้อหา -->
+    <div class="container">
+      <div class="content-area">
+        <div class="container-fluid py-3">
+          <!-- Nav Tabs -->
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link active"
+                id="broken-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#broken"
+                type="button"
+                role="tab"
+                aria-controls="broken"
+                aria-selected="true"
+              >
+                อุปกรณ์ชำรุด (3)
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button
+                class="nav-link"
+                id="accepted-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#accepted"
+                type="button"
+                role="tab"
+                aria-controls="accepted"
+                aria-selected="false"
+              >
+                รับเรื่องแล้ว (5)
+              </button>
+            </li>
+          </ul>
+
+          <!-- ส่วนของ Filter -->
+          <div class="row filter-row">
+            <div class="col-12">
+              <label for="typeFilter">ชนิดอุปกรณ์:</label>
+              <select id="typeFilter" class="form-select d-inline-block">
+                <option value="all">ทั้งหมด</option>
+                <option value="จอคอมพิวเตอร์">จอคอมพิวเตอร์</option>
+                <option value="เครื่องคอมพิวเตอร์">เครื่องคอมพิวเตอร์</option>
+                <option value="เก้าอี้">เก้าอี้</option>
+                <option value="โต๊ะ">โต๊ะ</option>
+                <option value="เครื่องปรับอากาศ">เครื่องปรับอากาศ</option>
+              </select>
+
+              <label for="roomFilter">ห้อง:</label>
+              <select id="roomFilter" class="form-select d-inline-block">
+                <option value="all">ทั้งหมด</option>
+                <option value="SC2-414">SC2-414</option>
+                <option value="SC2-311">SC2-311</option>
+              </select>
+
+              <!-- ปฏิทิน -->
+              <label for="reportDate">วันที่:</label>
+              <input
+                type="date"
+                id="reportDate"
+                class="form-control d-inline-block"
+              />
+
+              <!-- จัดเรียงตาม “มาก่อน” / “หลังสุด” -->
+              <label for="sortOrder">จัดเรียงตาม:</label>
+              <select id="sortOrder" class="form-select d-inline-block">
+                <option value="asc">เก่าที่สุด</option>
+                <option value="desc">ใหม่สุด</option>
+              </select>
+              <!-- ไม่มีปุ่มกดกรอง -->
+            </div>
+          </div>
+          <!-- /Filter -->
+
+          <!-- Tab Contents -->
+          <div class="tab-content" id="myTabContent">
+            <!-- แท็บ: อุปกรณ์ชำรุด -->
+            <div
+              class="tab-pane fade show active"
+              id="broken"
+              role="tabpanel"
+              aria-labelledby="broken-tab"
+            >
+              <!-- โปรเจกเตอร์ -->
+              <div class="card my-3">
+                <div class="card-header h5">โปรเจกเตอร์</div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <img
+                        src="https://media.tarad.com/9/99aplus/img-lib/spd_20110616132046_b.JPG"
+                        class="img-fluid rounded"
+                        alt="โปรเจกเตอร์"
+                      />
+                    </div>
+                    <div class="col-md-9 mt-1">
+                      <h5 class="card-title mt-3">โปรเจกเตอร์เสียไม่แสดงผล</h5>
+                      <p class="mb-1"><strong>ห้อง:</strong> SC2-414</p>
+                      <p class="mb-1">
+                        <strong>ผู้แจ้ง:</strong> นายสมชัย รู้มาก
+                      </p>
+                      <p class="mb-1">
+                        <strong>อีเมล:</strong> somchai@nu.ac.th
+                      </p>
+                      <p class="mb-3">
+                        <strong>รายงานเมื่อ:</strong> 27 พฤศจิกายน 2567
+                      </p>
+                      <!-- ปุ่มรับเรื่อง -->
+                      <button class="btn btn-success">
+                        <i class="fa-solid fa-check text-white"></i>
+                        รับเรื่อง
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- วิชวลไลเซอร์ -->
+              <div class="card my-3">
+                <div class="card-header h5">วิชวลไลเซอร์</div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <img
+                        src="https://inwfile.com/s-ds/ajayhe.jpg"
+                        class="img-fluid rounded"
+                        alt="วิชวลไลเซอร์"
+                      />
+                    </div>
+                    <div class="col-md-9 mt-1">
+                      <h5 class="card-title">ไม่มีไฟแสดงความสว่างออกมา</h5>
+                      <p class="mb-1"><strong>ห้อง:</strong> SC2-311</p>
+                      <p class="mb-1">
+                        <strong>ผู้แจ้ง:</strong> นายณัฐพล ชูชัย
+                      </p>
+                      <p class="mb-1">
+                        <strong>อีเมล:</strong> natthapol65@nu.ac.th
+                      </p>
+                      <p class="mb-3">
+                        <strong>รายงานเมื่อ:</strong> 30 พฤศจิกายน 2567
+                      </p>
+                      <!-- ปุ่มรับเรื่อง -->
+                      <button class="btn btn-success">
+                        <i class="fa-solid fa-check text-white"></i>
+                        รับเรื่อง
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ทีวี -->
+              <div class="card my-3">
+                <div class="card-header h5">ทีวี</div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-3">
+                      <img
+                        src="https://f.ptcdn.info/260/079/000/rmpxj815jy2E47nfPdmg-o.jpg"
+                        class="img-fluid rounded"
+                        alt="ทีวี"
+                      />
+                    </div>
+                    <div class="col-md-9 mt-1">
+                      <h5 class="card-title">จอทีวีค้างแสดงผลไม่ได้</h5>
+                      <p class="mb-1"><strong>ห้อง:</strong> SC2-414</p>
+                      <p class="mb-1">
+                        <strong>ผู้แจ้ง:</strong> นายพรรณี สัมปุญญา
+                      </p>
+                      <p class="mb-1">
+                        <strong>อีเมล:</strong> phannee@nu.ac.th
+                      </p>
+                      <p class="mb-3">
+                        <strong>รายงานเมื่อ:</strong> 29 พฤศจิกายน 2567
+                      </p>
+                      <!-- ปุ่มรับเรื่อง -->
+                      <button class="btn btn-success">
+                        <i class="fa-solid fa-check text-white"></i>
+                        รับเรื่อง
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- สามารถใส่การ์ดอุปกรณ์ชำรุดอื่น ๆ เพิ่มเติมได้ -->
+            </div>
+            <!-- /แท็บ: อุปกรณ์ชำรุด -->
+
+            <!-- แท็บ: รับเรื่องแล้ว -->
+            <div
+              class="tab-pane fade"
+              id="accepted"
+              role="tabpanel"
+              aria-labelledby="accepted-tab"
+            >
+              <div id="accepted-content">
+                <div class="card my-3">
+                  <div class="card-header">ตัวอย่างรับเรื่องแล้ว (1)</div>
+                  <div class="card-body">
+                    <p>ข้อมูลเคสที่เคยรับเรื่องแล้ว</p>
+                  </div>
+                </div>
+                <!-- สามารถใส่ Card เพิ่มเติมได้ตามต้องการ -->
+              </div>
+            </div>
+            <!-- /แท็บ: รับเรื่องแล้ว -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap 5 Bundle JS -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-kY2ZevAM3psnZS9DcpeIHyNL1w2Aswrm7DhUTG+HWnRg0TICmdgT0N1A2LoDj4Mm"
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      // โหลด Sidebar
+      fetch("sidebar.html")
+        .then((resp) => resp.text())
+        .then((html) => {
+          document.getElementById("sidebar-container").innerHTML = html;
+        })
+        .then(() => {
+          // Highlight ปุ่ม “รายการอุปกรณ์ชำรุด”
+          const btnBroken = document.getElementById("btnBroken");
+          btnBroken.classList.add("btn-sidebar-active");
+        })
+        .catch((err) => console.error("Failed to load sidebar:", err));
+
+      // เมื่อคลิกแท็บ "รับเรื่องแล้ว" ให้ไปอีกหน้า
+      document
+        .querySelector("#accepted-tab")
+        .addEventListener("click", function () {
+          window.location.href = "accept_crash_equipments.html"; // หน้า "รับเรื่องแล้ว"
+        });
+    </script>
+  </body>
+</html>
