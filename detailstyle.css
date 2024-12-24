@@ -1,0 +1,52 @@
+.container {
+    width: 80%; /* Container width */
+    margin: auto; /* Center the container horizontally */
+    padding: 20px; /* Inner spacing */
+    border: 1px solid #000000; /* Optional border */
+    background-color: rgb(255, 255, 255); /* Optional background color */
+    display: flex; /* Flexbox for layout */
+    flex-direction: column; /* จัดเรียงองค์ประกอบในแนวตั้ง */
+    border-radius: 20px;
+    position: relative; /* ตั้งค่า relative เพื่อใช้กับตำแหน่ง absolute */
+
+}
+.h1{
+    position: absolute; /* ใช้ตำแหน่ง absolute */
+    top: 20px; /* ระยะห่างจากขอบบน */
+    left: 20px; /* ระยะห่างจากขอบซ้าย */
+    text-align: left; /* จัดข้อความให้ชิดซ้าย */
+}
+table {
+    width: 100%; /* กำหนดความกว้างของตารางให้เต็ม */
+    table-layout: fixed; /* ทำให้คอลัมน์มีขนาดเท่ากัน */
+    border-collapse: collapse; /* ทำให้ขอบของเซลล์ไม่ทับซ้อนกัน */
+}
+
+td {
+    padding: 10px; /* ระยะห่างภายในเซลล์ */
+    text-align: center; /* จัดข้อความให้กึ่งกลาง */
+    
+}
+hr {
+    border: 0;
+    border-top: 2px solid #000000; /* เส้นขีดขนาด 2px */
+    margin: 20px 0; /* เพิ่มระยะห่างจากบรรทัดก่อนหน้า */
+}
+button{
+    padding: 8px 16px; /* กำหนดขนาดปุ่ม */
+    font-size: 14px; /* ขนาดตัวอักษรในปุ่ม */
+    background-color: #4CAF50; /* สีพื้นหลังของปุ่ม */
+    color: white; /* สีตัวอักษร */
+    border: none; /* ไม่มีขอบ */
+    border-radius: 5px; /* มุมปุ่มโค้ง */
+    cursor: pointer; /* แสดงตัวชี้เมาส์เป็นมือ */
+    margin-top: 10px; /* ระยะห่างจากเนื้อหาข้างบน */
+    width: 100px; /* กำหนดความกว้าง */
+    height: 40px; /* กำหนดความสูง */
+    line-height: 30px; /* กำหนดให้เท่ากับความสูง */
+    text-align: center; /* จัดข้อความให้อยู่ตรงกลางแนวนอน */
+    align-self: left; /* จัดตำแหน่งปุ่มใน container */
+}
+button:hover {
+    background-color: #45a049; /* สีพื้นหลังของปุ่มเมื่อเอาเมาส์ไปชี้ */
+}
