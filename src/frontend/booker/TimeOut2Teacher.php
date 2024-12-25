@@ -158,9 +158,9 @@ include('db_connect.php');
         <div class="d-flex flex-wrap mb-3">
             <button class="btn-simple">Download เอกสาร</button>
             <!-- ลิงก์ไปยังไฟล์ 'TimeInTeacher.html' ในเครื่อง -->
-            <button class="btn-simple" id="bookingButton" onclick="window.location.href='TimeOut3.php'">กรอกเอกสารการจองนอกเวลาออนไลน์</button>
+            <a href="TimeOut3Teacher.php"><button class="btn-simple" id="bookingButton">กรอกเอกสารการจองนอกเวลาออนไลน์</button></a>
         </div>
-        <div class="input-group">
+        <div class=" input-group">
             <input type="file" id="fileInput">
         </div>
         <button type="button" class="btn-confirm" onclick="window.location.href='home.php'">ยืนยัน</button>
@@ -178,7 +178,7 @@ include('db_connect.php');
             console.log(`สถานะ: ${selected}`);
             // เพิ่มฟังก์ชันเปลี่ยนหน้าเมื่อเลือก "ในเวลา"
             if (selected === 'ในเวลา') {
-                window.location.href = './TimeIn.php';
+                window.location.href = './TimeInTeacher.php';
             }
         }
         document.getElementById("bookingButton").addEventListener("click", function() {

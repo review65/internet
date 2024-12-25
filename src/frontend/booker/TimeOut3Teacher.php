@@ -289,7 +289,7 @@ include('db_connect.php');
             console.log(`สถานะ: ${selected}`);
             // เพิ่มฟังก์ชันเปลี่ยนหน้าเมื่อเลือก "ในเวลา"
             if (selected === 'ในเวลา') {
-                window.location.href = './TimeInTeacher.html';
+                window.location.href = './TimeInTeacher.php';
             }
         }
 
@@ -359,8 +359,8 @@ include('db_connect.php');
                     <input type="text" class="form-control" placeholder="นาย ปัญญากร ทิมจันทึก" value="นาย ปัญญากร ทิมจันทึก" readonly>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">รหัสประจำตัว</label>
-                    <input type="text" class="form-control" placeholder="65312993" value="65312993" readonly>
+                    <label class="form-label">เบอร์โทร</label>
+                    <input type="text" class="form-control" placeholder="0568592113" value="0568592113" readonly>
                 </div>
             </div>
             <div class="row mb-3">
@@ -368,10 +368,7 @@ include('db_connect.php');
                     <label class="form-label">จำนวนนิสิต</label>
                     <input type="number" min="0" class="form-control" placeholder="ระบุจำนวนนิสิต">
                 </div>
-                <div class="col-md-4">
-                    <label class="form-label">เบอร์โทร</label>
-                    <input type="text" class="form-control" placeholder="0967543321" value="0967543321" readonly>
-                </div>
+
                 <div class="col-md-4">
                     <label class="form-label">วัน</label>
                     <select class="form-select">
