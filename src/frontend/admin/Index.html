@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Floor Layout</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .room:hover {
+      transform: scale(1.05);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding-top: 60px;
+    }
+
+    .modal-content {
+      background-color: #fff;
+      margin: 5% auto;
+      /* Centers the modal vertically */
+      padding: 15px;
+      /* Reduce padding */
+      border: 1px solid #888;
+      width: 50%;
+      /* Adjust the width (default is 80%) */
+      border-radius: 10px;
+      /* Rounded corners */
+      max-width: 400px;
+      /* Optional: Set a maximum width */
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #6c34a3;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #563080;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="floor-buttons">
+      <a href="floor2.html"><button>ชั้น 2</button></a>
+      <a href="floor3.html"><button>ชั้น 3</button></a>
+      <button>ชั้น 4</button>
+    </div>
+    <div class="report-buttons">
+      <a href="user_requests.html"><button>คำร้องขอใช้งานห้อง</button></a>
+      <a href="request_crash_equipments.html"><button>รายงานอุปกรณ์ชำรุด</button></a>
+    </div>
+    <div class="logout-button">
+      <button>ออกจากระบบ</button>
+    </div>
+  </header>
+  <main>
+    <div class="layout">
+      <div class="room vertical" id="SC2-411" onclick="manageRoom('SC2-411')">SC2-411</div>
+      <div class="room large" id="SC2-412">SC2-412</div>
+      <div class="room small" id="sc2-413">sc2-413</div>
+      <div class="room large1" id="sc2-414" onclick="manageRoom('sc2-414')">sc2-414</div>
+      <div class="room vertical1" id="sc2-415" onclick="manageRoom('sc2-415')">SC2-415</div>
+      <div class="room small1">sc2-416</div>
+      <div class="room small2">sc2-416</div>
+      <div class="room vertical2">SC2-417</div>
+      <div class="room small3">sc2-418</div>
+      <div class="room small4">sc2-418</div>
+      <div class="room vertical1Down">sc2-410</div>
+      <div class="room vertical1Down">ห้องสุขา หญิง</div>
+      <div class="room vertical1Down">ห้องสุขา ชาย</div>
+      <div class="room smallDown">sc2-409</div>
+      <div class="room largeDown1">sc2-408</div>
+      <div class="room largeDown2" id="sc2-407" onclick="manageRoom('sc2-407')">sc2-407</div>
+    </div>
+
+    <div id="roomModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2 id="roomDetailTitle">Room Details</h2>
+        <button id="roomDetailsButton">รายละเอียดภายในห้อง</button>
+        <div>
+          <label for="status">สถานะห้อง :</label>
+          <select id="status">
+            <option value="available">ว่าง</option>
+            <option value="not-available">ไม่ว่าง</option>
+            <option value="closed">ปิดห้อง</option>
+          </select>
+        </div>
+        <button id="saveStatus">Save Status</button>
+      </div>
+    </div>
+
+    <script>
+      // Modal and Room Elements
+      const modal = document.getElementById("roomModal");
+      const closeModal = document.querySelector(".close");
+      const saveStatusButton = document.getElementById("saveStatus");
+      const statusSelect = document.getElementById("status");
+      const roomDetailTitle = document.getElementById("roomDetailTitle");
+      const roomDetailsButton = document.getElementById("roomDetailsButton");
+
+      let currentRoomElement = null; // Track the current room being edited
+
+      // Function to manage the room details
+      function manageRoom(roomId) {
+        currentRoomElement = document.getElementById(roomId);
+        if (!currentRoomElement) {
+          alert("Room element not found");
+          return;
+        }
+
+        // Display the room name in the modal
+        roomDetailTitle.innerText = `รายละเอียดห้อง : ${currentRoomElement.innerText}`;
+
+        // Set the current status in the dropdown
+        const currentStatus = currentRoomElement.classList.contains("closed")
+          ? "closed"
+          : currentRoomElement.classList.contains("not-available")
+            ? "not-available"
+            : "available";
+
+        statusSelect.value = currentStatus;
+
+        // Define the button behavior based on room ID
+        roomDetailsButton.onclick = function () {
+          if (roomId === "sc2-407") {
+            window.location.href = "test407.html";
+          } else if (roomId === "sc2-414") {
+            window.location.href = "test414.html";
+          } else if (roomId === "sc2-415") {
+            window.location.href = "test415.html";
+          } else if (roomId === "SC2-411") {
+            window.location.href = "test411.html";
+          } else {
+            alert("No details available for this room.");
+          }
+        };
+
+        // Show the modal
+        modal.style.display = "block";
+      }
+
+      // Save status changes
+      saveStatusButton.onclick = function () {
+        if (!currentRoomElement) return;
+
+        const selectedStatus = statusSelect.value;
+
+        // Update room classes and text
+        currentRoomElement.classList.remove("available", "not-available", "closed");
+        currentRoomElement.classList.add(selectedStatus);
+
+        if (selectedStatus === "closed" && !currentRoomElement.innerText.includes(" (ปิดห้อง)")) {
+          currentRoomElement.innerText += " (ปิดห้อง)";
+        } else if (selectedStatus !== "closed") {
+          currentRoomElement.innerText = currentRoomElement.innerText.replace(" (ปิดห้อง)", "");
+        }
+
+        // Save status in localStorage
+        localStorage.setItem(currentRoomElement.id, selectedStatus);
+
+        // Close the modal
+        modal.style.display = "none";
+      };
+
+      // Close the modal
+      closeModal.onclick = () => {
+        modal.style.display = "none";
+      };
+
+      // Close the modal when clicking outside
+      window.onclick = function (event) {
+        if (event.target === modal) {
+          modal.style.display = "none";
+        }
+      };
+
+      // Load room statuses from localStorage on page load
+      window.onload = function () {
+        const rooms = document.querySelectorAll(".room");
+        rooms.forEach((room) => {
+          const savedStatus = localStorage.getItem(room.id);
+          if (savedStatus) {
+            room.classList.add(savedStatus);
+          }
+        });
+      };
+    </script>
+    </div>
+  </main>
+</body>
+
+</html>
