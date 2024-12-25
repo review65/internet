@@ -356,7 +356,7 @@ include('db_connect.php');
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label class="form-label">ชื่อ-นามสกุล</label>
-                    <input type="text" class="form-control" placeholder="นาย ปัญญากร ทิมจันทึก" value="นาย ปัญญากร ทิมจันทึก" readonly>
+                    <input type="text" class="form-control" placeholder="นาย คำมี ไททศ" value="นาย คำมี ไททศ" readonly>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">เบอร์โทร</label>
@@ -399,7 +399,7 @@ include('db_connect.php');
                         <td><span>ห้องปฏิบัติการ</span></td>
                         <td><span>SC2-308</span></td>
                         <td><span>22/12/2024</span></td>
-                        <td><span>08.00-15.00</span></td>
+                        <td><span>17.00-21.00</span></td>
                     </tr>
                 </tbody>
             </table>

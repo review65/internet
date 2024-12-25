@@ -364,14 +364,14 @@ include('db_connect.php');
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label class="form-label">ชื่อ-นามสกุล</label>
-                    <input type="text" class="form-control" placeholder="นาย ปัญญากร ทิมจันทึก" value="นาย ปัญญากร ทิมจันทึก" readonly>
+                    <input type="text" class="form-control" placeholder="นาย ปัญญากร ทิมจันทึก" value="นาย สมศักดิ์ ใจเย็น" readonly>
                 </div>
 
             </div>
             <div class="row mb-3">
                 <div class="col-md-4">
                     <label class="form-label">เบอร์โทร</label>
-                    <input type="text" class="form-control" placeholder="0967543321" value="0967543321" readonly>
+                    <input type="text" class="form-control" placeholder="0967543321" value="0968514566" readonly>
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">จำนวนนิสิต</label>
