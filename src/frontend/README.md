@@ -2,6 +2,6 @@
 
 Separate Directory
 
-- Executive
-- Admin
 - Booker
+- Admin
+- Executive
