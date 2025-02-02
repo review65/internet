@@ -79,6 +79,26 @@
             box-sizing: border-box;
         }
 
+        .large-dropdown {
+            width: calc(100% - 20px);
+            margin-bottom: 10px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        /* ปรับปรุงหน้าตาเพิ่มเติม */
+        .large-dropdown:focus {
+            border-color: #4caf50;
+            /* เปลี่ยนสีขอบเมื่อคลิก */
+            outline: none;
+            /* ลบเส้นกรอบสีฟ้ามาตรฐาน */
+            box-shadow: 0 0 5px #4caf50;
+            /* เพิ่มเงา */
+        }
+
         .add-equipment button {
             width: 100%;
             background-color: #27ae60;
@@ -193,7 +213,10 @@
         <button class="back-button" onclick="goBack()">Go Back</button>
         <div class="equipment-list" id="equipmentList"></div>
         <div class="add-equipment">
-            <input type="text" id="newEquipment" placeholder="Equipment Name">
+            <select id="newEquipment" class="large-dropdown">
+                <option value="Microphone">Microphone</option>
+                <option value="Pointer">Pointer</option>
+            </select>
             <input type="number" id="equipmentQuantity" placeholder="Quantity" min="1">
             <button onclick="addEquipment()">Add Equipment</button>
         </div>
@@ -254,7 +277,7 @@
 
         function loadEquipment(roomId) {
             const savedEquipment = JSON.parse(localStorage.getItem(`${roomId}_equipmentData`)) || [];
-            equipmentList.innerHTML = ""; // Clear previous equipment list
+            equipmentList.innerHTML = "";
             savedEquipment.forEach(item => {
                 addEquipmentToDOM(item.name, item.quantity);
             });
@@ -265,7 +288,16 @@
             const quantity = parseInt(document.getElementById("equipmentQuantity").value, 10);
 
             if (newEquipment && quantity > 0) {
-                addEquipmentToDOM(newEquipment, quantity);
+                // ตรวจสอบว่าอุปกรณ์นั้นมีอยู่แล้วหรือไม่
+                const existingItem = findEquipmentByName(newEquipment);
+                if (existingItem) {
+                    // หากมีอยู่แล้วให้เพิ่มจำนวน
+                    existingItem.quantity += quantity;
+                    updateEquipmentInDOM(newEquipment, existingItem.quantity);
+                } else {
+                    // หากไม่มีให้เพิ่มอุปกรณ์ใหม่
+                    addEquipmentToDOM(newEquipment, quantity);
+                }
                 saveEquipment(roomId);
                 document.getElementById("newEquipment").value = "";
                 document.getElementById("equipmentQuantity").value = "";
@@ -277,11 +309,24 @@
         function addEquipmentToDOM(name, quantity) {
             const equipmentItem = document.createElement("div");
             equipmentItem.classList.add("equipment-item");
+            equipmentItem.setAttribute("data-name", name);  // เพิ่ม attribute สำหรับการค้นหา
             equipmentItem.innerHTML = `
         <span>${name} (${quantity})</span>
         <button onclick="removeEquipment(this)">Remove</button>
     `;
             equipmentList.appendChild(equipmentItem);
+        }
+
+        function updateEquipmentInDOM(name, newQuantity) {
+            const equipmentItem = document.querySelector(`.equipment-item[data-name="${name}"]`);
+            if (equipmentItem) {
+                equipmentItem.querySelector("span").textContent = `${name} (${newQuantity})`;
+            }
+        }
+
+        function findEquipmentByName(name) {
+            const equipmentItems = JSON.parse(localStorage.getItem(`${roomId}_equipmentData`)) || [];
+            return equipmentItems.find(item => item.name === name);
         }
 
         function removeEquipment(button) {
@@ -297,7 +342,6 @@
             });
             localStorage.setItem(`${roomId}_equipmentData`, JSON.stringify(equipmentItems));
         }
-
         // Function for the Back Button
         function goBack() {
             window.history.back();

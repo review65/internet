@@ -1,370 +1,254 @@
 <!DOCTYPE html>
 <html lang="th">
-  <head>
-    <meta charset="UTF-8" />
-    <title>รายการอุปกรณ์ชำรุด</title>
-    <!-- Bootstrap 5 Bundle CSS -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-      crossorigin="anonymous"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-      }
 
-      .content-area {
-        /* ตำแหน่ง main content */
-        margin-left: 290px;
-        /* เว้นด้านซ้ายกันทับกับ Sidebar */
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>รายการอุปกรณ์ชำรุด</title>
+  <!-- Bootstrap 5 Bundle CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="executive.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
 
-      /* Responsive: จอเล็ก */
-      @media (max-width: 576px) {
-        .sidebar {
-          position: relative;
-          width: 100%;
-          max-width: 100%;
-          box-shadow: none;
-        }
+    header {
+      background-color: #d9c1ab;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      border-bottom: 2px solid #000;
+    }
 
-        .content-area {
-          margin-left: 0;
-        }
-      }
+    .floor-buttons {
+      display: flex;
+      gap: 15px;
+    }
 
-      /* สไตล์เพิ่มเติมสำหรับพื้นที่ Filter */
-      .filter-row {
-        margin-top: 1rem;
-        margin-bottom: 1rem;
-      }
+    .report-buttons {
+      display: flex;
+      gap: 15px;
+      margin-left: auto;
+    }
 
-      .filter-row label {
-        margin-right: 0.5rem;
-        font-weight: bold;
-      }
+    .logout-button {
+      margin-left: 15px;
+    }
 
-      .filter-row select {
-        width: auto;
-        display: inline-block;
-        margin-right: 1rem;
-      }
+    .floor-buttons button,
+    .report-buttons button,
+    .logout-button button {
+      border: none;
+      padding: 10px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 16px;
+    }
 
-      .filter-row input[type="date"] {
-        width: auto;
-        display: inline-block;
-        margin-right: 1rem;
-      }
+    .floor-buttons button {
+      background-color: #6c34a3;
+      color: white;
+    }
 
-      header {
-        background-color: #d9c1ab;
-        padding: 10px;
-        display: flex;
-        align-items: center;
-        border-bottom: 2px solid #000;
-      }
+    .floor-buttons button:hover {
+      background-color: #563080;
+    }
 
-      .floor-buttons {
-        display: flex;
-        gap: 15px;
-      }
+    .report-buttons button {
+      background-color: rgb(37, 196, 37);
+      color: white;
+    }
 
-      .report-buttons {
-        display: flex;
-        gap: 15px;
-        margin-left: auto;
-        /* Push this container to the right */
-      }
+    .report-buttons button:hover {
+      background-color: rgb(30, 170, 30);
+    }
 
-      .logout-button {
-        margin-left: 15px;
-        /* Add some spacing between the report buttons and the logout button */
-      }
+    .logout-button button {
+      background-color: orange;
+      color: white;
+    }
 
-      .floor-buttons button {
-        background-color: #6c34a3;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 20px;
-        cursor: pointer;
-        font-size: 16px;
-      }
+    .logout-button button:hover {
+      background-color: rgb(179, 117, 0);
+    }
 
-      .floor-buttons button:hover {
-        background-color: #563080;
-      }
+    .table-responsive {
+      margin-top: 20px;
+    }
 
-      .floor-buttons button:active {
-        box-shadow: inset 0px 4px 6px rgba(0, 0, 0, 0.4);
-      }
+    .modal-title {
+      font-weight: bold;
+    }
 
-      .report-buttons button {
-        background-color: rgb(37, 196, 37);
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 20px;
-        cursor: pointer;
-        font-size: 16px;
-      }
+    .modal-body p {
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
 
-      .report-buttons button:hover {
-        background-color: rgb(30, 170, 30);
-      }
+<body>
+  <header>
+    <div class="floor-buttons">
+      <a href="floor2.html"><button>ชั้น 2</button></a>
+      <a href="floor3.html"><button>ชั้น 3</button></a>
+      <a href="Index.html"><button>ชั้น 4</button></a>
+    </div>
+    <div class="report-buttons">
+      <a href="user_requests.html"><button>คำร้องขอใช้งานห้อง</button></a>
+      <button>รายงานอุปกรณ์ชำรุด</button>
+    </div>
+    <div class="logout-button">
+      <button>ออกจากระบบ</button>
+    </div>
+  </header>
 
-      .report-buttons button:active {
-        box-shadow: inset 0px 4px 6px rgba(0, 0, 0, 0.4);
-      }
-
-      .logout-button button {
-        background-color: orange;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 20px;
-        cursor: pointer;
-        font-size: 16px;
-      }
-
-      .logout-button button:hover {
-        background-color: rgb(179, 117, 0);
-      }
-
-      .logout-button button:active {
-        box-shadow: inset 0px 4px 6px rgba(0, 0, 0, 0.4);
-      }
-    </style>
-  </head>
-
-  <body>
-    <header>
-      <div class="floor-buttons">
-        <a href="floor2.html"><button>ชั้น 2</button></a>
-        <a href="floor3.html"><button>ชั้น 3</button></a>
-        <a href="index.html"><button>ชั้น 4</button></a>
-      </div>
-      <div class="report-buttons">
-        <a href="user_requests.html"><button>คำร้องขอใช้งานห้อง</button></a>
-        <button>รายงานอุปกรณ์ชำรุด</button>
-      </div>
-      <div class="logout-button">
-        <button>ออกจากระบบ</button>
-      </div>
-    </header>
-    <!-- เนื้อหา -->
-    <div class="content-area">
-      <div class="container-fluid py-3">
-        <!-- Nav Tabs -->
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-          <li class="nav-item" role="presentation">
-            <button
-              class="nav-link active"
-              id="broken-tab"
-              data-bs-toggle="tab"
-              data-bs-target="#broken"
-              type="button"
-              role="tab"
-              aria-controls="broken"
-              aria-selected="true"
-            >
-              อุปกรณ์ชำรุด (3)
-            </button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button
-              class="nav-link"
-              id="accepted-tab"
-              data-bs-toggle="tab"
-              data-bs-target="#accepted"
-              type="button"
-              role="tab"
-              aria-controls="accepted"
-              aria-selected="false"
-            >
-              รับเรื่องแล้ว (5)
-            </button>
-          </li>
-        </ul>
-
-        <!-- ส่วนของ Filter -->
-        <div class="row filter-row">
-          <div class="col-12">
-            <label for="typeFilter">ชนิดอุปกรณ์:</label>
-            <select id="typeFilter" class="form-select d-inline-block">
-              <option value="all">ทั้งหมด</option>
-              <option value="จอคอมพิวเตอร์">จอคอมพิวเตอร์</option>
-              <option value="เครื่องคอมพิวเตอร์">เครื่องคอมพิวเตอร์</option>
-              <option value="เก้าอี้">เก้าอี้</option>
-              <option value="โต๊ะ">โต๊ะ</option>
-              <option value="เครื่องปรับอากาศ">เครื่องปรับอากาศ</option>
-            </select>
-
-            <label for="roomFilter">ห้อง:</label>
-            <select id="roomFilter" class="form-select d-inline-block">
-              <option value="all">ทั้งหมด</option>
-              <option value="SC2-414">SC2-414</option>
-              <option value="SC2-311">SC2-311</option>
-            </select>
-
-            <!-- ปฏิทิน -->
-            <label for="reportDate">วันที่:</label>
-            <input
-              type="date"
-              id="reportDate"
-              class="form-control d-inline-block"
-            />
-
-            <!-- จัดเรียงตาม “มาก่อน” / “หลังสุด” -->
-            <label for="sortOrder">จัดเรียงตาม:</label>
-            <select id="sortOrder" class="form-select d-inline-block">
-              <option value="asc">มาก่อน</option>
-              <option value="desc">หลังสุด</option>
-            </select>
-            <!-- ไม่มีปุ่มกดกรอง -->
-          </div>
+  <div id="app">
+    <div class="container mt-4">
+      <h3>รายการอุปกรณ์ชำรุด</h3>
+      <div class="tab-bar">
+        <div class="tab active"><a href="request_crash_equipments.html">รอซ่อม</a></div>
+        <div class="tab"><a href="wait.html">กำลังดำเนินการ</a></div>
+        <div class="tab"><a href="success.html">ซ่อมเสร็จ</a></div>
+        <div class="dropdown-container">
+          <select id="sorttime">
+            <option value="" selected>จัดเรียงตามเวลา</option>
+            <option value="oldest">เวลาเก่าที่สุด</option>
+            <option value="newest">เวลาใหม่ที่สุด</option>
+          </select>
         </div>
-        <!-- /Filter -->
+      </div>
 
-        <!-- Tab Contents -->
-        <div class="tab-content" id="myTabContent">
-          <!-- แท็บ: อุปกรณ์ชำรุด -->
-          <div
-            class="tab-pane fade show active"
-            id="broken"
-            role="tabpanel"
-            aria-labelledby="broken-tab"
-          >
-            <!-- โปรเจกเตอร์ -->
-            <div class="card my-3">
-              <div class="card-header h5">โปรเจกเตอร์</div>
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-md-3">
-                    <img
-                      src="https://media.tarad.com/9/99aplus/img-lib/spd_20110616132046_b.JPG"
-                      class="img-fluid rounded"
-                      alt="โปรเจกเตอร์"
-                    />
-                  </div>
-                  <div class="col-md-9 mt-1">
-                    <h5 class="card-title mt-3">โปรเจกเตอร์เสียไม่แสดงผล</h5>
-                    <p class="mb-1"><strong>ห้อง:</strong> SC2-414</p>
-                    <p class="mb-1">
-                      <strong>ผู้แจ้ง:</strong> นายสมชัย รู้มาก
-                    </p>
-                    <p class="mb-1"><strong>อีเมล:</strong> somchai@nu.ac.th</p>
-                    <p class="mb-3">
-                      <strong>รายงานเมื่อ:</strong> 27 พฤศจิกายน 2567
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th class="text-center">วันที่แจ้งซ่อม</th>
+              <th class="text-center">เลขแจ้งซ่อม</th>
+              <th class="text-center">ผู้แจ้งซ่อม</th>
+              <th class="text-center">อีเมล</th>
+              <th class="text-center">สถานะ</th>
+              <th class="text-center">ห้อง</th>
+              <th class="text-center">อุปกรณ์ที่แจ้งซ่อม</th>
+              <th class="text-center">ผู้รับแจ้งซ่อม</th>
+              <th class="text-center">รายละเอียด</th>
+            </tr>
+          </thead>
+          <tbody id="equipment-table">
+            <!-- Data will be inserted here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
 
-            <!-- วิชวลไลเซอร์ -->
-            <div class="card my-3">
-              <div class="card-header h5">วิชวลไลเซอร์</div>
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-md-3">
-                    <img
-                      src="https://inwfile.com/s-ds/ajayhe.jpg"
-                      class="img-fluid rounded"
-                      alt="วิชวลไลเซอร์"
-                    />
-                  </div>
-                  <div class="col-md-9 mt-1">
-                    <h5 class="card-title">ไม่มีไฟแสดงความสว่างออกมา</h5>
-                    <p class="mb-1"><strong>ห้อง:</strong> SC2-311</p>
-                    <p class="mb-1"><strong>ผู้แจ้ง:</strong> นายณัฐพล ชูชัย</p>
-                    <p class="mb-1">
-                      <strong>อีเมล:</strong> natthapol65@nu.ac.th
-                    </p>
-                    <p class="mb-3">
-                      <strong>รายงานเมื่อ:</strong> 30 พฤศจิกายน 2567
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- ทีวี -->
-            <div class="card my-3">
-              <div class="card-header h5">ทีวี</div>
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-md-3">
-                    <img
-                      src="https://f.ptcdn.info/260/079/000/rmpxj815jy2E47nfPdmg-o.jpg"
-                      class="img-fluid rounded"
-                      alt="ทีวี"
-                    />
-                  </div>
-                  <div class="col-md-9 mt-1">
-                    <h5 class="card-title">จอทีวีค้างแสดงผลไม่ได้</h5>
-                    <p class="mb-1"><strong>ห้อง:</strong> SC2-414</p>
-                    <p class="mb-1">
-                      <strong>ผู้แจ้ง:</strong> นายพรรณี สัมปุญญา
-                    </p>
-                    <p class="mb-1"><strong>อีเมล:</strong> phannee@nu.ac.th</p>
-                    <p class="mb-3">
-                      <strong>รายงานเมื่อ:</strong> 29 พฤศจิกายน 2567
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- สามารถใส่การ์ดอุปกรณ์ชำรุดอื่น ๆ เพิ่มเติมได้ -->
+    <!-- Modal -->
+    <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="detailModalLabel">รายละเอียดอุปกรณ์ชำรุด</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <!-- /แท็บ: อุปกรณ์ชำรุด -->
-
-          <!-- แท็บ: รับเรื่องแล้ว -->
-          <div
-            class="tab-pane fade"
-            id="accepted"
-            role="tabpanel"
-            aria-labelledby="accepted-tab"
-          >
-            <div id="accepted-content">
-              <div class="card my-3">
-                <div class="card-header">ตัวอย่างรับเรื่องแล้ว (1)</div>
-                <div class="card-body">
-                  <p>ข้อมูลเคสที่เคยรับเรื่องแล้ว</p>
-                </div>
-              </div>
-              <!-- สามารถใส่ Card เพิ่มเติมได้ตามต้องการ -->
-            </div>
+          <div class="modal-body">
+            <p><strong>วันที่แจ้งซ่อม:</strong> <span id="modal-date"></span></p>
+            <p><strong>เลขแจ้งซ่อม:</strong> <span id="modal-id"></span></p>
+            <p><strong>ผู้แจ้งซ่อม:</strong> <span id="modal-reporter"></span></p>
+            <p><strong>อีเมล:</strong> <span id="modal-email"></span></p>
+            <p><strong>สถานะ:</strong> <span id="modal-status"></span></p>
+            <p><strong>ห้อง:</strong> <span id="modal-room"></span></p>
+            <p><strong>อุปกรณ์:</strong> <span id="modal-item"></span></p>
+            <p><strong>ผู้รับแจ้งซ่อม:</strong> <span id="modal-receiver"></span></p>
+            <p><strong>รายละเอียด:</strong> <span id="modal-detail"></span></p>
           </div>
-          <!-- /แท็บ: รับเรื่องแล้ว -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
+          </div>
         </div>
       </div>
     </div>
-    <!-- /เนื้อหา -->
+  </div>
 
-    <!-- Bootstrap 5 Bundle JS -->
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-kY2ZevAM3psnZS9DcpeIHyNL1w2Aswrm7DhUTG+HWnRg0TICmdgT0N1A2LoDj4Mm"
-      crossorigin="anonymous"
-    ></script>
+  <!-- Bootstrap 5 Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    async function fetchData() {
+      try {
+        const [brokenResponse, studentResponse] = await Promise.all([
+          fetch('http://localhost:3000/data/Equipments_list_brokened'),
+          fetch('http://localhost:3000/data/Student_information')
+        ]);
 
-    <!-- ฟังก์ชันย้ายการ์ดและเปลี่ยนแท็บ (ตัวอย่าง) -->
-    <script>
-      document
-        .querySelector("#accepted-tab")
-        .addEventListener("click", function () {
-          window.location.href = "accept_crash_equipments.html"; // ตัวอย่างเปลี่ยนไปยังหน้าใหม่หรือจุดใดก็ได้
+        const brokenData = await brokenResponse.json();
+        const studentData = await studentResponse.json();
+
+        // JOIN ข้อมูลจากทั้งสองตารางโดยใช้ Identify_ID
+        const mergedData = brokenData
+          .filter(row => row.Repair_status === 'รอซ่อม') // คัดกรองเฉพาะที่รอซ่อม
+          .map(row => {
+            const student = studentData.find(s => s.Student_ID === row.Identify_ID) || {};
+            return {
+              ...row,
+              email: student.email || '-',  // ดึง email จาก studentData
+              studentName: student.Name || '-', // ดึงชื่อจาก studentData
+            };
+          });
+
+        const tableBody = document.getElementById('equipment-table');
+        tableBody.innerHTML = ''; // เคลียร์ข้อมูลเก่า
+
+        mergedData.forEach(row => {
+          tableBody.innerHTML += `
+        <tr>
+          <td class="text-center">${new Date(row.Repair_date).toLocaleDateString()}</td>
+          <td class="text-center">${row.Repair_numbers}</td>
+          <td class="text-center">${row.studentName}</td> <!-- ชื่อนักเรียนจาก StudentInfo -->
+          <td class="text-center">${row.email}</td> <!-- Email จาก StudentInfo -->
+          <td class="text-center">${row.Repair_status}</td>
+          <td class="text-center">${row.Rooms_ID || '-'}</td>
+          <td class="text-center">${row.Equipments_ID || '-'}</td>
+          <td class="text-center">${row.Repair_person_name || '-'}</td>
+          <td class="text-center">
+            <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal"
+              data-date="${new Date(row.Repair_date).toLocaleDateString()}"
+              data-id="${row.Repair_numbers}"
+              data-reporter="${row.Repair_person_name || '-'}"
+              data-email="${row.email}"
+              data-status="${row.Repair_status}"
+              data-room="${row.Rooms_ID || '-'}"
+              data-item="${row.Equipments_ID || '-'}"
+              data-receiver="${row.Identify_ID || '-'}"
+              data-detail="${row.Damaged_details || '-'}">
+              รายละเอียด
+            </button>
+          </td>
+        </tr>
+      `;
         });
-    </script>
-  </body>
+      } catch (error) {
+        console.error('❌ Error fetching data:', error);
+      }
+    }
+
+    // Update modal content dynamically
+    const detailModal = document.getElementById('detailModal');
+    detailModal.addEventListener('show.bs.modal', function (event) {
+      const button = event.relatedTarget;
+      document.getElementById('modal-date').textContent = button.getAttribute('data-date');
+      document.getElementById('modal-id').textContent = button.getAttribute('data-id');
+      document.getElementById('modal-reporter').textContent = button.getAttribute('data-reporter');
+      document.getElementById('modal-email').textContent = button.getAttribute('data-email');
+      document.getElementById('modal-status').textContent = button.getAttribute('data-status');
+      document.getElementById('modal-room').textContent = button.getAttribute('data-room');
+      document.getElementById('modal-item').textContent = button.getAttribute('data-item');
+      document.getElementById('modal-receiver').textContent = button.getAttribute('data-receiver');
+      document.getElementById('modal-detail').textContent = button.getAttribute('data-detail');
+    });
+
+    // Fetch data on page load
+    fetchData();
+  </script>
+</body>
+
 </html>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,6 +13,7 @@
             height: 100vh;
             background-color: #f9f9f9;
         }
+
         .sidebar {
             width: 300px;
             background-color: #2c3e50;
@@ -23,15 +25,18 @@
             flex-direction: column;
             overflow-y: auto;
         }
+
         .sidebar h2 {
             margin: 0 0 20px;
             font-size: 24px;
             border-bottom: 2px solid #ecf0f1;
             padding-bottom: 10px;
         }
+
         .equipment-list {
             margin-bottom: 20px;
         }
+
         .equipment-item {
             display: flex;
             justify-content: space-between;
@@ -41,9 +46,11 @@
             padding: 10px 15px;
             border-radius: 5px;
         }
+
         .equipment-item span {
             color: #ecf0f1;
         }
+
         .equipment-item button {
             background-color: #e74c3c;
             color: white;
@@ -53,12 +60,35 @@
             cursor: pointer;
             font-size: 14px;
         }
+
         .equipment-item button:hover {
             background-color: #c0392b;
         }
+
         .add-equipment {
             margin-top: auto;
         }
+
+        .large-dropdown {
+            width: calc(100% - 20px);
+            margin-bottom: 10px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        /* ปรับปรุงหน้าตาเพิ่มเติม */
+        .large-dropdown:focus {
+            border-color: #4caf50;
+            /* เปลี่ยนสีขอบเมื่อคลิก */
+            outline: none;
+            /* ลบเส้นกรอบสีฟ้ามาตรฐาน */
+            box-shadow: 0 0 5px #4caf50;
+            /* เพิ่มเงา */
+        }
+
         .add-equipment input {
             width: calc(100% - 20px);
             margin-bottom: 10px;
@@ -68,6 +98,7 @@
             font-size: 16px;
             box-sizing: border-box;
         }
+
         .add-equipment button {
             width: 100%;
             background-color: #27ae60;
@@ -78,48 +109,59 @@
             cursor: pointer;
             border-radius: 5px;
         }
+
         .add-equipment button:hover {
             background-color: #229954;
         }
+
         .content {
             flex: 1;
             padding: 20px;
             box-sizing: border-box;
         }
+
         .content h1 {
             font-size: 28px;
             margin-bottom: 20px;
             color: #34495e;
         }
+
         .legend {
             display: flex;
             justify-content: space-between;
             margin-bottom: 20px;
         }
+
         .legend span {
             display: flex;
             align-items: center;
             font-size: 16px;
             color: #34495e;
         }
-        .legend .working, .legend .broken {
+
+        .legend .working,
+        .legend .broken {
             width: 20px;
             height: 20px;
             border-radius: 3px;
             margin-right: 10px;
         }
+
         .legend .working {
             background-color: green;
         }
+
         .legend .broken {
             background-color: red;
         }
+
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
             gap: 10px;
             justify-items: center;
         }
+
         .table {
             width: 60px;
             height: 60px;
@@ -134,15 +176,19 @@
             color: white;
             transition: transform 0.2s;
         }
+
         .table:hover {
             transform: scale(1.1);
         }
+
         .working {
             background-color: #2ecc71;
         }
+
         .broken {
             background-color: #e74c3c;
         }
+
         /* Style for Back Button */
         .back-button {
             background-color: #3498db;
@@ -154,18 +200,23 @@
             border-radius: 5px;
             margin-bottom: 20px;
         }
+
         .back-button:hover {
             background-color: #2980b9;
         }
     </style>
 </head>
+
 <body>
     <div class="sidebar">
         <h2>Manage Equipment</h2>
         <button class="back-button" onclick="goBack()">Go Back</button>
         <div class="equipment-list" id="equipmentList"></div>
         <div class="add-equipment">
-            <input type="text" id="newEquipment" placeholder="Equipment Name">
+            <select id="newEquipment" class="large-dropdown">
+                <option value="Microphone">Microphone</option>
+                <option value="Pointer">Pointer</option>
+            </select>
             <input type="number" id="equipmentQuantity" placeholder="Quantity" min="1">
             <button onclick="addEquipment()">Add Equipment</button>
         </div>
@@ -173,20 +224,25 @@
     <div class="content">
         <h1>Floor Plan 212</h1>
         <div class="legend">
-            <span><div class="working"></div> Available</span>
-            <span><div class="broken"></div> Unavailable</span>
+            <span>
+                <div class="working"></div> Available
+            </span>
+            <span>
+                <div class="broken"></div> Unavailable
+            </span>
         </div>
         <div class="grid" id="tableGrid"></div>
     </div>
 
     <script>
+        const roomId = "room212"; // Define your room ID here
         const equipmentList = document.getElementById("equipmentList");
         const tableGrid = document.getElementById("tableGrid");
         const totalTables = 20; // Number of tables
 
         window.onload = function () {
             loadTables();
-            loadEquipment();
+            loadEquipment(roomId); // Pass roomId
         };
 
         function toggleStatus(table, index) {
@@ -211,15 +267,9 @@
             });
         }
 
-        function saveTables() {
-            const tableStatuses = Array.from(document.querySelectorAll(".table")).map(table =>
-                table.classList.contains('working') ? 'working' : 'broken'
-            );
-            localStorage.setItem("tableData", JSON.stringify(tableStatuses));
-        }
-
-        function loadEquipment() {
-            const savedEquipment = JSON.parse(localStorage.getItem("equipmentData")) || [];
+        function loadEquipment(roomId) {
+            const savedEquipment = JSON.parse(localStorage.getItem(`${roomId}_equipmentData`)) || [];
+            equipmentList.innerHTML = "";
             savedEquipment.forEach(item => {
                 addEquipmentToDOM(item.name, item.quantity);
             });
@@ -230,8 +280,14 @@
             const quantity = parseInt(document.getElementById("equipmentQuantity").value, 10);
 
             if (newEquipment && quantity > 0) {
-                addEquipmentToDOM(newEquipment, quantity);
-                saveEquipment();
+                const existingItem = findEquipmentByName(newEquipment, roomId);
+                if (existingItem) {
+                    existingItem.quantity += quantity;
+                    updateEquipmentInDOM(newEquipment, existingItem.quantity);
+                } else {
+                    addEquipmentToDOM(newEquipment, quantity);
+                }
+                saveEquipment(roomId);
                 document.getElementById("newEquipment").value = "";
                 document.getElementById("equipmentQuantity").value = "";
             } else {
@@ -242,31 +298,44 @@
         function addEquipmentToDOM(name, quantity) {
             const equipmentItem = document.createElement("div");
             equipmentItem.classList.add("equipment-item");
+            equipmentItem.setAttribute("data-name", name);
             equipmentItem.innerHTML = `
-                <span>${name} (${quantity})</span>
-                <button onclick="removeEquipment(this)">Remove</button>
-            `;
+            <span>${name} (${quantity})</span>
+            <button onclick="removeEquipment(this)">Remove</button>
+        `;
             equipmentList.appendChild(equipmentItem);
+        }
+
+        function updateEquipmentInDOM(name, newQuantity) {
+            const equipmentItem = document.querySelector(`.equipment-item[data-name="${name}"]`);
+            if (equipmentItem) {
+                equipmentItem.querySelector("span").textContent = `${name} (${newQuantity})`;
+            }
+        }
+
+        function findEquipmentByName(name, roomId) {
+            const equipmentItems = JSON.parse(localStorage.getItem(`${roomId}_equipmentData`)) || [];
+            return equipmentItems.find(item => item.name === name);
         }
 
         function removeEquipment(button) {
             button.parentElement.remove();
-            saveEquipment();
+            saveEquipment(roomId);
         }
 
-        function saveEquipment() {
+        function saveEquipment(roomId) {
             const equipmentItems = Array.from(document.querySelectorAll(".equipment-item")).map(item => {
                 const text = item.querySelector("span").textContent;
                 const [name, quantity] = text.split(" (");
                 return { name, quantity: parseInt(quantity.replace(")", ""), 10) };
             });
-            localStorage.setItem("equipmentData", JSON.stringify(equipmentItems));
+            localStorage.setItem(`${roomId}_equipmentData`, JSON.stringify(equipmentItems));
         }
 
-        // Function for the Back Button
         function goBack() {
             window.history.back();
         }
     </script>
 </body>
+
 </html>

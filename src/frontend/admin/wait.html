@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>รายการอุปกรณ์ชำรุด</title>
+  <!-- Bootstrap 5 Bundle CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="executive.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    header {
+      background-color: #d9c1ab;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      border-bottom: 2px solid #000;
+    }
+
+    .floor-buttons {
+      display: flex;
+      gap: 15px;
+    }
+
+    .report-buttons {
+      display: flex;
+      gap: 15px;
+      margin-left: auto;
+    }
+
+    .logout-button {
+      margin-left: 15px;
+    }
+
+    .floor-buttons button,
+    .report-buttons button,
+    .logout-button button {
+      border: none;
+      padding: 10px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .floor-buttons button {
+      background-color: #6c34a3;
+      color: white;
+    }
+
+    .floor-buttons button:hover {
+      background-color: #563080;
+    }
+
+    .report-buttons button {
+      background-color: rgb(37, 196, 37);
+      color: white;
+    }
+
+    .report-buttons button:hover {
+      background-color: rgb(30, 170, 30);
+    }
+
+    .logout-button button {
+      background-color: orange;
+      color: white;
+    }
+
+    .logout-button button:hover {
+      background-color: rgb(179, 117, 0);
+    }
+
+    .table-responsive {
+      margin-top: 20px;
+    }
+
+    .modal-title {
+      font-weight: bold;
+    }
+
+    .modal-body p {
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="floor-buttons">
+      <a href="floor2.html"><button>ชั้น 2</button></a>
+      <a href="floor3.html"><button>ชั้น 3</button></a>
+      <a href="Index.html"><button>ชั้น 4</button></a>
+    </div>
+    <div class="report-buttons">
+      <a href="user_requests.html"><button>คำร้องขอใช้งานห้อง</button></a>
+      <button>รายงานอุปกรณ์ชำรุด</button>
+    </div>
+    <div class="logout-button">
+      <button>ออกจากระบบ</button>
+    </div>
+  </header>
+
+  <div class="container mt-4">
+    <h3>รายการอุปกรณ์ชำรุด</h3>
+    <div class="tab-bar">
+      <div class="tab "><a href="request_crash_equipments.html">รอซ่อม</div></a>
+      <div class="tab active"><a href="wait.html">กำลังดำเนินการ</div></a>
+      <div class="tab "><a href="success.html">ซ่อมเสร็จ</div></a>
+      <div class="dropdown-container">
+          <select id="sorttime">
+              <option value="" selected>จัดเรียงตามเวลา</option>
+              <option value="oldest">เวลาเก่าที่สุด</option>
+              <option value="newest">เวลาใหม่ที่สุด</option>
+          </select>
+      </div>
+  </div>
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th class="text-center">วันที่แจ้งซ่อม</th>
+            <th class="text-center">เลขแจ้งซ่อม</th>
+            <th class="text-center">ผู้แจ้งซ่อม</th>
+            <th class="text-center">อีเมล</th>
+            <th class="text-center">สถานะภาพ</th>
+            <th class="text-center">ห้อง</th>
+            <th class="text-center">อุปกรณ์ที่เเจ้งซ่อม</th>
+            <th class="text-center">ผู้รับแจ้งซ่อม</th>
+            <th class="text-center">สถานะ</th>
+            <th class="text-center">รายละเอียด</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-center">5 ม.ค. 2568</td>
+            <td class="text-center">308005003</td>
+            <td class="text-center">พันธมิตร เมืองนันท์</td>
+            <td class="text-center">pantamit@gmail.com</td>
+            <td class="text-center">นักศึกษา</td>
+            <td class="text-center">SC2-308</td>
+            <td class="text-center">จอคอมพิวเตอร์</td>
+            <td class="text-center">นายยุทธพงษ์ คงถาวร</td>
+            <td class="text-center"><span class="text-warning">กำลังจัดซื้อ</span></td>
+            <td class="text-center">
+              <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" 
+                      data-bs-target="#detailModal" 
+                      data-date="5 ม.ค. 2568" 
+                      data-id="308005003" 
+                      data-reporter="พันธมิตร เมืองนันท์" 
+                      data-posi="นักศึกษา"
+                      data-room="SC2-308"
+                      data-item="จอคอมพิวเตอร์" 
+                      data-image="img\OIP (2).jpg"
+                      data-receiver="นายยุทธพงษ์ คงถาวร" 
+                      data-detail="-"
+                      data-status="กำลังจัดซื้อ">
+                รายละเอียด
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-center">11 ม.ค. 2568</td>
+            <td class="text-center">308005006</td>
+            <td class="text-center">สมชาย ลื่นเลิง</td>
+            <td class="text-center">somchai2@gmail.com</td>
+            <td class="text-center">นักศึกษา</td>
+            <td class="text-center">SC2-308</td>
+            <td class="text-center">โปรเจคเตอร์</td>
+            <td class="text-center">นายยุทธพงษ์ คงถาวร</td>
+            <td class="text-center"><span class="text-warning">กำลังซ่อม</span></td>
+            <td class="text-center">
+              <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" 
+                      data-bs-target="#detailModal" 
+                      data-date="11 ม.ค. 2568" 
+                      data-id="308005006" 
+                      data-reporter="สมชาย ลื่นเลิง" 
+                      data-posi="นักศึกษา"
+                      data-room="SC2-308"
+                      data-item="โปรเจคเตอร์" 
+                      data-image="img\OIF.jpg"
+                      data-receiver="นายยุทธพงษ์ คงถาวร" 
+                      data-detail="โปรเจคเตอร์ ไฟไม่ติด"
+                      data-status="กำลังซ่อม">
+                รายละเอียด
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="detailModalLabel">รายละเอียดอุปกรณ์ชำรุด</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p><strong>วันที่แจ้งซ่อม:</strong> <span id="modal-date"></span></p>
+          <p><strong>ใบแจ้งซ่อม:</strong> <span id="modal-id"></span></p>
+          <p><strong>ผู้แจ้งซ่อม:</strong> <span id="modal-reporter"></span></p>
+          <p><strong>สถานะภาพ:</strong> <span id="modal-posi"></span></p>
+          <p><strong>ห้อง:</strong> <span id="modal-room"></span></p>
+          <p><strong>รายการแจ้งซ่อม:</strong> <span id="modal-item"></span></p>
+          <p><strong>ผู้รับแจ้งซ่อม:</strong> <span id="modal-receiver"></span></p>
+          <p><strong>สถานะ:</strong> <span id="modal-status"></span></p>
+          <p><strong>ปัญหาเพิ่มเติม:</strong> <span id="modal-detail"></span></p>
+          <div class="text-center mt-3">
+            <img id="modal-image" src="" alt="อุปกรณ์ที่แจ้งซ่อม" class="img-fluid rounded" style="max-height: 300px; object-fit: contain;">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap 5 Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // JavaScript for updating modal content dynamically
+    const detailModal = document.getElementById('detailModal');
+    detailModal.addEventListener('show.bs.modal', function (event) {
+      const button = event.relatedTarget;
+      const date = button.getAttribute('data-date');
+      const id = button.getAttribute('data-id');
+      const reporter = button.getAttribute('data-reporter');
+      const posi = button.getAttribute('data-posi');
+      const room = button.getAttribute('data-room');
+      const item = button.getAttribute('data-item');
+      const receiver = button.getAttribute('data-receiver');
+      const status = button.getAttribute('data-status');
+      const image = button.getAttribute('data-image');
+      const detail = button.getAttribute('data-detail');
+
+      document.getElementById('modal-date').textContent = date;
+      document.getElementById('modal-id').textContent = id;
+      document.getElementById('modal-reporter').textContent = reporter;
+      document.getElementById('modal-posi').textContent = posi;
+      document.getElementById('modal-room').textContent = room;
+      document.getElementById('modal-item').textContent = item;
+      document.getElementById('modal-receiver').textContent = receiver;
+      document.getElementById('modal-status').textContent = status;
+      document.getElementById('modal-detail').textContent = detail;
+      const modalImage = document.getElementById('modal-image');
+      if (image) {
+        modalImage.src = image;
+        modalImage.style.display = "block"; // แสดงรูป
+      } else {
+        modalImage.style.display = "none"; // ซ่อนรูปถ้าไม่มี
+      }
+    });
+  </script>
+</body>
+
+</html>

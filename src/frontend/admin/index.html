@@ -64,6 +64,15 @@
     button:hover {
       background-color: #563080;
     }
+
+    #scheduleContent {
+      margin-top: 20px;
+      max-height: 400px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      padding: 10px;
+      background-color: #f9f9f9;
+    }
   </style>
 </head>
 
@@ -72,7 +81,7 @@
     <div class="floor-buttons">
       <a href="floor2.html"><button>ชั้น 2</button></a>
       <a href="floor3.html"><button>ชั้น 3</button></a>
-      <a href="index.html"><button>ชั้น 4</button>
+      <button>ชั้น 4</button>
     </div>
     <div class="report-buttons">
       <a href="user_requests.html"><button>คำร้องขอใช้งานห้อง</button></a>
@@ -102,21 +111,24 @@
       <div class="room largeDown2" id="sc2-407" onclick="manageRoom('sc2-407')">sc2-407</div>
     </div>
 
+    <!-- Modal (Popup) -->
     <div id="roomModal" class="modal">
       <div class="modal-content">
         <span class="close">&times;</span>
         <h2 id="roomDetailTitle">Room Details</h2>
         <button id="roomDetailsButton">รายละเอียดภายในห้อง</button>
+        <button id="scheduleButton">ตารางการใช้ห้อง</button>
         <div>
           <label for="status">สถานะห้อง :</label>
           <select id="status">
             <option value="available">ว่าง</option>
             <option value="not-available">ไม่ว่าง</option>
-            <option value="closed">ปิดห้อง</option>
+            <option value="closed">ซ่อมบำรุง</option>
           </select>
         </div>
         <button id="saveStatus">Save Status</button>
       </div>
+    </div>
     </div>
 
     <script>
@@ -130,6 +142,34 @@
 
       let currentRoomElement = null; // Track the current room being edited
 
+      /*async function loadSchedule(roomId) {
+        const scheduleContent = document.getElementById("scheduleContent");
+        let fileName = "";
+
+        // ใช้ if...else เพื่อเลือกไฟล์สำหรับแต่ละห้อง
+        if (roomId === "SC2-308") {
+          fileName = "schedule308.html";
+        } else if (roomId === "SC2-307") {
+          fileName = "schedule307.html";
+        } else if (roomId === "SC2-311") {
+          fileName = "schedule311.html";
+        } else {
+          scheduleContent.innerHTML = `<p>ไม่มีตารางสำหรับห้อง ${roomId}</p>`;
+          return; // ถ้าไม่มีตารางสำหรับห้องนั้น ให้หยุดทำงาน
+        }
+
+        try {
+          // โหลดไฟล์ HTML
+          const response = await fetch(fileName);
+          if (!response.ok) throw new Error("ไม่สามารถโหลดไฟล์ได้");
+          const content = await response.text();
+
+          // แสดงเนื้อหาใน modal
+          scheduleContent.innerHTML = content;
+        } catch (error) {
+          scheduleContent.innerHTML = `<p>เกิดข้อผิดพลาด: ${error.message}</p>`;
+        }
+      }*/
       // Function to manage the room details
       function manageRoom(roomId) {
         currentRoomElement = document.getElementById(roomId);
@@ -140,6 +180,8 @@
 
         // Display the room name in the modal
         roomDetailTitle.innerText = `รายละเอียดห้อง : ${currentRoomElement.innerText}`;
+
+        //loadSchedule(roomId);
 
         // Set the current status in the dropdown
         const currentStatus = currentRoomElement.classList.contains("closed")
@@ -165,6 +207,13 @@
           }
         };
 
+        //Shcedule
+        if (roomId === 'SC2-308') {
+          scheduleButton.onclick = () => window.location.href = "Schedule308.html";
+        }
+        if (roomId === 'SC2-307') {
+          scheduleButton.onclick = () => window.location.href = "Schedule307.html";
+        }
         // Show the modal
         modal.style.display = "block";
       }
@@ -179,10 +228,10 @@
         currentRoomElement.classList.remove("available", "not-available", "closed");
         currentRoomElement.classList.add(selectedStatus);
 
-        if (selectedStatus === "closed" && !currentRoomElement.innerText.includes(" (ปิดห้อง)")) {
-          currentRoomElement.innerText += " (ปิดห้อง)";
+        if (selectedStatus === "closed" && !currentRoomElement.innerText.includes(" (ซ่อมบำรุง)")) {
+          currentRoomElement.innerText += " (ซ่อมบำรุง)";
         } else if (selectedStatus !== "closed") {
-          currentRoomElement.innerText = currentRoomElement.innerText.replace(" (ปิดห้อง)", "");
+          currentRoomElement.innerText = currentRoomElement.innerText.replace(" (ซ่อมบำรุง)", "");
         }
 
         // Save status in localStorage
@@ -215,6 +264,7 @@
         });
       };
     </script>
+    <script src="database.js"></script>
     </div>
   </main>
 </body>
