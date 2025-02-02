@@ -607,14 +607,15 @@
         }
 
         .room.closed::before {
-            content: "ไม่ว่าง";
+            content: "ซ่อม\Aบำรุง";
+            color: black;
             position: absolute;
             top: 10px;
             right: 10px;
             width: 30px;
             height: 30px;
-            background-color: red;
-            border: 2px solid white;
+            background-color: #eed202;
+            border: 2px solid black;
             border-radius: 50%;
             display: flex;
             justify-content: center;
@@ -636,6 +637,15 @@
         #roomDetailsButton:hover {
             background-color: #40826D;
         }
+
+        #scheduleContent {
+            margin-top: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
     </style>
 </head>
 
@@ -644,7 +654,7 @@
         <div class="floor-buttons">
             <a href="floor2.html"><button>ชั้น 2</button></a>
             <a href="floor3.html"><button>ชั้น 3</button></a>
-            <a href="index.html"><button>ชั้น 4</button></a>
+            <a href="Index.html"><button>ชั้น 4</button></a>
         </div>
         <div class="report-buttons">
             <a href="user_requests.html"><button>คำร้องขอใช้งานห้อง</button></a>
@@ -685,17 +695,20 @@
             <span class="close">&times;</span>
             <h2 id="roomDetailTitle">Room Details</h2>
             <button id="roomDetailsButton">รายละเอียดภายในห้อง</button>
+            <button id="scheduleButton">ตารางการใช้ห้อง</button>
+
             <div>
                 <label for="status">สถานะห้อง :</label>
                 <select id="status">
                     <option value="available">ว่าง</option>
                     <option value="not-available">ไม่ว่าง</option>
-                    <option value="closed">ปิดห้อง</option>
+                    <option value="closed">ซ่อมบำรุง</option>
                 </select>
             </div>
-
             <button id="saveStatus">Save Status</button>
         </div>
+    </div>
+    </div>
     </div>
     </div>
     <script>
@@ -712,12 +725,43 @@
 
         let currentRoomElement = null;
 
+        /*async function loadSchedule(roomId) {
+            const scheduleContent = document.getElementById("scheduleContent");
+            let fileName = "";
+
+            // ใช้ if...else เพื่อเลือกไฟล์สำหรับแต่ละห้อง
+            if (roomId === "SC2-308") {
+                fileName = "schedule308.html";
+            } else if (roomId === "SC2-307") {
+                fileName = "schedule307.html";
+            } else if (roomId === "SC2-311") {
+                fileName = "schedule311.html";
+            } else {
+                scheduleContent.innerHTML = `<p>ไม่มีตารางสำหรับห้อง ${roomId}</p>`;
+                return; // ถ้าไม่มีตารางสำหรับห้องนั้น ให้หยุดทำงาน
+            }
+
+            try {
+                // โหลดไฟล์ HTML
+                const response = await fetch(fileName);
+                if (!response.ok) throw new Error("ไม่สามารถโหลดไฟล์ได้");
+                const content = await response.text();
+
+                // แสดงเนื้อหาใน modal
+                scheduleContent.innerHTML = content;
+            } catch (error) {
+                scheduleContent.innerHTML = `<p>เกิดข้อผิดพลาด: ${error.message}</p>`;
+            }
+        }*/
+
         function manageRoom(roomId) {
             currentRoomElement = document.getElementById(roomId);
             const roomName = currentRoomElement.innerText;
 
             // ตั้งชื่อห้องใน Modal
             roomDetailTitle.innerText = "รายละเอียดห้อง " + roomName;
+
+            //loadSchedule(roomId);
 
             // เช็คสถานะปัจจุบัน (Available/Not Available)
             const currentStatus = currentRoomElement.classList.contains('available') ? 'available' : 'not-available';
@@ -734,6 +778,14 @@
                     alert("ไม่มีรายละเอียดเพิ่มเติมสำหรับห้องนี้");
                 }
             };
+
+            //Schedule
+            if (roomId === 'SC2-211') {
+                scheduleButton.onclick = () => window.location.href = "";
+            }
+            if (roomId === 'SC2-307') {
+                scheduleButton.onclick = () => window.location.href = "Schedule307.html";
+            }
 
 
 
@@ -762,7 +814,7 @@
 
             } else if (selectedStatus === "closed") {
                 currentRoomElement.classList.add('not-available', 'closed');
-                currentRoomElement.innerText += ' (ปิดห้อง)';
+                currentRoomElement.innerText += ' (ซ่อมบำรุง)';
             }
 
             // บันทึกสถานะลงใน LocalStorage
@@ -811,7 +863,7 @@
 
                     } else if (savedStatus === "closed") {
                         room.classList.add("not-available", "closed");
-                        room.innerText += ' (ปิดห้อง)';
+                        room.innerText += ' (ซ่อมบำรุง)';
                     }
                 }
             });

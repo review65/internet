@@ -156,6 +156,14 @@ main {
   background-color: green;
 }
 
+.room.largeDown2.closed::after {
+  content: 'ซ่อม\Aบำรุง'; /* Using '\A' for a new line */
+  white-space: pre; /* Ensures '\A' is interpreted as a new line */
+  color: black;
+  background-color: #eed202;
+  border: 2px solid black;
+}
+
 .room.large1 {
   position: relative;
   grid-column: 6 / span 2;
@@ -183,6 +191,14 @@ main {
 .room.large1.available::after {
   content: 'ว่าง';
   background-color: green;
+}
+
+.room.large1.closed::after {
+  content: 'ซ่อม\Aบำรุง'; /* Using '\A' for a new line */
+  white-space: pre; /* Ensures '\A' is interpreted as a new line */
+  color: black;
+  background-color: #eed202;
+  border: 2px solid black;
 }
 
 .room.small {
@@ -245,6 +261,14 @@ main {
   background-color: green;
 }
 
+.room.vertical.closed::after {
+  content: 'ซ่อม\Aบำรุง'; /* Using '\A' for a new line */
+  white-space: pre; /* Ensures '\A' is interpreted as a new line */
+  color: black;
+  background-color: #eed202;
+  border: 2px solid black;
+}
+
 .room.vertical1 {
   position: relative;
   grid-column: 8 / span 1;
@@ -272,6 +296,14 @@ main {
 .room.vertical1.available::after {
   content: 'ว่าง';
   background-color: green;
+}
+
+.room.vertical1.closed::after {
+  content: 'ซ่อม\Aบำรุง'; /* Using '\A' for a new line */
+  white-space: pre; /* Ensures '\A' is interpreted as a new line */
+  color: black;
+  background-color: #eed202;
+  border: 2px solid black;
 }
 
 .room.vertical2{
