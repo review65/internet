@@ -194,13 +194,13 @@
             const equipmentName = equipment ? equipment.Equipments_Name : '-'; // ตรวจสอบก่อนเข้าถึง
             const equipmentType = equipment ? equipment.Equipments_Type : '-';
 
-            console.log('📌 Equipment:', equipment); // ดูค่าของ equipment ก่อนใช้งาน
+            console.log('📌 Equipment:', equipment["Equipments_name"]); // ดูค่าของ equipment ก่อนใช้งาน
 
             return {
               ...row,
               email: student.email || '-',  // ดึง email จาก studentData
               studentName: student.Name || '-', // ดึงชื่อจาก studentData
-              equipmentName: equipment.Equipments_Name, // ใช้ค่าที่ดึงได้จาก equipment
+              equipmentName: equipment.Equipments_name, // ใช้ค่าที่ดึงได้จาก equipment
               equipmentType, // ใช้ประเภทอุปกรณ์
             };
           });
