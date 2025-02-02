@@ -175,23 +175,33 @@
   <script>
     async function fetchData() {
       try {
-        const [brokenResponse, studentResponse] = await Promise.all([
+        const [brokenResponse, studentResponse, equipmentsResponse] = await Promise.all([
           fetch('http://localhost:3000/data/Equipments_list_brokened'),
-          fetch('http://localhost:3000/data/Student_information')
+          fetch('http://localhost:3000/data/Student_information'),
+          fetch('http://localhost:3000/data/Equipments_list_information')
         ]);
 
         const brokenData = await brokenResponse.json();
         const studentData = await studentResponse.json();
+        const equipmentsData = await equipmentsResponse.json();
 
         // JOIN ข้อมูลจากทั้งสองตารางโดยใช้ Identify_ID
         const mergedData = brokenData
           .filter(row => row.Repair_status === 'รอซ่อม') // คัดกรองเฉพาะที่รอซ่อม
           .map(row => {
             const student = studentData.find(s => s.Student_ID === row.Identify_ID) || {};
+            const equipment = equipmentsData.find(e => e.Equipments_ID === row.Equipments_ID) || {};
+            const equipmentName = equipment ? equipment.Equipments_Name : '-'; // ตรวจสอบก่อนเข้าถึง
+            const equipmentType = equipment ? equipment.Equipments_Type : '-';
+
+            console.log('📌 Equipment:', equipment); // ดูค่าของ equipment ก่อนใช้งาน
+
             return {
               ...row,
               email: student.email || '-',  // ดึง email จาก studentData
               studentName: student.Name || '-', // ดึงชื่อจาก studentData
+              equipmentName: equipment.Equipments_Name, // ใช้ค่าที่ดึงได้จาก equipment
+              equipmentType, // ใช้ประเภทอุปกรณ์
             };
           });
 
@@ -207,7 +217,7 @@
           <td class="text-center">${row.email}</td> <!-- Email จาก StudentInfo -->
           <td class="text-center">${row.Repair_status}</td>
           <td class="text-center">${row.Rooms_ID || '-'}</td>
-          <td class="text-center">${row.Equipments_ID || '-'}</td>
+          <td class="text-center">${row.equipmentName || '-'}</td>
           <td class="text-center">${row.Repair_person_name || '-'}</td>
           <td class="text-center">
             <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal"
@@ -217,7 +227,7 @@
               data-email="${row.email}"
               data-status="${row.Repair_status}"
               data-room="${row.Rooms_ID || '-'}"
-              data-item="${row.Equipments_ID || '-'}"
+              data-item="${row.equipmentName || '-'}"
               data-receiver="${row.Identify_ID || '-'}"
               data-detail="${row.Damaged_details || '-'}">
               รายละเอียด
