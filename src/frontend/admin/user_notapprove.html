@@ -58,111 +58,7 @@
                         </div>
                         <div id="custom-calendar"></div>
                     </div>
-
-                    <script>
-                        const currentDate = new Date();
-
-                        function toggleCalendar() {
-                            const calendar = document.getElementById("dropdown-calendar");
-                            if (calendar.style.display === "none" || calendar.style.display === "") {
-                                calendar.style.display = "block";
-                                initializeCalendar();
-                            } else {
-                                calendar.style.display = "none";
-                            }
-                        }
-
-                        document.addEventListener("click", function (event) {
-                            const calendar = document.getElementById("dropdown-calendar");
-                            const iconElement = document.querySelector("i.bi-caret-down-fill");
-                            if (!calendar.contains(event.target) && event.target !== iconElement) {
-                                calendar.style.display = "none";
-                            }
-                        });
-
-                        function initializeCalendar() {
-                            const monthSelect = document.getElementById("month-select");
-                            const yearSelect = document.getElementById("year-select");
-
-                            // Populate months
-                            monthSelect.innerHTML = "";
-                            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-                            monthNames.forEach((month, index) => {
-                                const option = document.createElement("option");
-                                option.value = index;
-                                option.text = month;
-                                if (index === currentDate.getMonth()) option.selected = true;
-                                monthSelect.appendChild(option);
-                            });
-
-                            // Populate years
-                            yearSelect.innerHTML = "";
-                            const startYear = currentDate.getFullYear() - 10;
-                            const endYear = currentDate.getFullYear() + 50;
-                            for (let year = startYear; year <= endYear; year++) {
-                                const option = document.createElement("option");
-                                option.value = year;
-                                option.text = year;
-                                if (year === currentDate.getFullYear()) option.selected = true;
-                                yearSelect.appendChild(option);
-                            }
-
-                            renderCustomCalendar();
-                        }
-
-                        function renderCustomCalendar() {
-                            const calendarDiv = document.getElementById("custom-calendar");
-                            calendarDiv.innerHTML = ""; // Clear existing calendar
-
-                            const selectedMonth = parseInt(document.getElementById("month-select").value);
-                            const selectedYear = parseInt(document.getElementById("year-select").value);
-
-                            const daysInMonth = new Date(selectedYear, selectedMonth + 1, 0).getDate();
-                            const firstDay = new Date(selectedYear, selectedMonth, 1).getDay();
-
-                            const calendarTable = document.createElement("table");
-                            calendarTable.style.borderCollapse = "collapse";
-                            calendarTable.style.width = "100%";
-
-                            // Header row
-                            const headerRow = document.createElement("tr");
-                            ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].forEach(day => {
-                                const th = document.createElement("th");
-                                th.style.textAlign = "center";
-                                th.innerText = day;
-                                headerRow.appendChild(th);
-                            });
-                            calendarTable.appendChild(headerRow);
-
-                            // Dates
-                            let date = 1;
-                            for (let i = 0; i < 6; i++) { // Up to 6 rows
-                                const row = document.createElement("tr");
-                                for (let j = 0; j < 7; j++) {
-                                    const cell = document.createElement("td");
-                                    cell.style.textAlign = "center";
-                                    cell.style.padding = "5px";
-                                    cell.style.border = "1px solid #ddd";
-                                    if (i === 0 && j < firstDay) {
-                                        cell.innerText = ""; // Empty cell
-                                    } else if (date > daysInMonth) {
-                                        break;
-                                    } else {
-                                        cell.innerText = date;
-                                        cell.style.cursor = "pointer";
-                                        cell.onclick = function () {
-                                            document.getElementById("dropdown-calendar").style.display = "none";
-                                        };
-                                        date++;
-                                    }
-                                    row.appendChild(cell);
-                                }
-                                calendarTable.appendChild(row);
-                            }
-
-                            calendarDiv.appendChild(calendarTable);
-                        }
-                    </script>
+                    <script src="dateScript.js"></script>
                     <th style="color: #929292;">ชื่อ-นามสกุล</th>
                     <th style="color: #929292;">อีเมล</th>
                     <th style="color: #929292;">สถานภาพ
@@ -224,40 +120,13 @@
 
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>2567-12-1</td>
-                    <td>นายชัยวัฒน์ วรชัย</td>
-                    <td>chaiwat@nu.ac.th</td>
-                    <td>อาจารย์</td>
-                    <td>sc2-308</td>
-                    <td>2567-12-4<br>จ. 16:00 - 21:00</td>
-                    <td class="text-center"><i class="bi bi-file-earmark-pdf"></i></td>
-                    <td>Router (20), Switch (10)</td>
-                    <td class="actions2">
-                        <i style="color: #AfAfAf;">ไม่อนุมัติ</i>
-                    </td>
-
-                </tr>
-                <tr>
-                    <td>2567-12-3</td>
-                    <td>นายสุรชัย สายคำ</td>
-                    <td>surachai65@nu.ac.th</td>
-                    <td>นิสิต</td>
-                    <td>sc2-307</td>
-                    <td>2567-12-8<br>ศ. 16.00 - 22.00</td>
-                    <td class="text-center"><i class="bi bi-file-earmark-pdf"></i></td>
-                    <td>ไมค์โครโฟน (30)</td>
-                    <td class="actions2">
-                        <i style="color: #AfAfAf;">ไม่อนุมัติ</i>
-                    </td>
-
-                </tr>
-                <!-- Add more rows here as needed -->
+            <tbody id ='rooms'>
+                
             </tbody>
         </table>
     </div>
     </div>
+    <script src="UserRequest.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
