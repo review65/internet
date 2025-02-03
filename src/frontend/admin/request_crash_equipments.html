@@ -170,77 +170,11 @@
     </div>
   </div>
 
+  <script src="BrokenEquipment.js"></script>
+  <script src="TabBarFix.js"></script>
   <!-- Bootstrap 5 Bundle JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    async function fetchData() {
-      try {
-        const [brokenResponse, studentResponse, equipmentsResponse] = await Promise.all([
-          fetch('http://localhost:3000/data/Equipments_list_brokened'),
-          fetch('http://localhost:3000/data/Student_information'),
-          fetch('http://localhost:3000/data/Equipments_list_information')
-        ]);
-
-        const brokenData = await brokenResponse.json();
-        const studentData = await studentResponse.json();
-        const equipmentsData = await equipmentsResponse.json();
-
-        // JOIN ข้อมูลจากทั้งสองตารางโดยใช้ Identify_ID
-        const mergedData = brokenData
-          .filter(row => row.Repair_status === 'รอซ่อม') // คัดกรองเฉพาะที่รอซ่อม
-          .map(row => {
-            const student = studentData.find(s => s.Student_ID === row.Identify_ID) || {};
-            const equipment = equipmentsData.find(e => e.Equipments_ID === row.Equipments_ID) || {};
-            const equipmentName = equipment ? equipment.Equipments_Name : '-'; // ตรวจสอบก่อนเข้าถึง
-            const equipmentType = equipment ? equipment.Equipments_Type : '-';
-
-            console.log('📌 Equipment:', equipment["Equipments_name"]); // ดูค่าของ equipment ก่อนใช้งาน
-
-            return {
-              ...row,
-              email: student.email || '-',  // ดึง email จาก studentData
-              studentName: student.Name || '-', // ดึงชื่อจาก studentData
-              equipmentName: equipment.Equipments_name, // ใช้ค่าที่ดึงได้จาก equipment
-              equipmentType, // ใช้ประเภทอุปกรณ์
-            };
-          });
-
-        const tableBody = document.getElementById('equipment-table');
-        tableBody.innerHTML = ''; // เคลียร์ข้อมูลเก่า
-
-        mergedData.forEach(row => {
-          tableBody.innerHTML += `
-        <tr>
-          <td class="text-center">${new Date(row.Repair_date).toLocaleDateString()}</td>
-          <td class="text-center">${row.Repair_numbers}</td>
-          <td class="text-center">${row.studentName}</td> <!-- ชื่อนักเรียนจาก StudentInfo -->
-          <td class="text-center">${row.email}</td> <!-- Email จาก StudentInfo -->
-          <td class="text-center">${row.Repair_status}</td>
-          <td class="text-center">${row.Rooms_ID || '-'}</td>
-          <td class="text-center">${row.equipmentName || '-'}</td>
-          <td class="text-center">${row.Repair_person_name || '-'}</td>
-          <td class="text-center">
-            <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal"
-              data-date="${new Date(row.Repair_date).toLocaleDateString()}"
-              data-id="${row.Repair_numbers}"
-              data-reporter="${row.Repair_person_name || '-'}"
-              data-email="${row.email}"
-              data-status="${row.Repair_status}"
-              data-room="${row.Rooms_ID || '-'}"
-              data-item="${row.equipmentName || '-'}"
-              data-receiver="${row.Identify_ID || '-'}"
-              data-detail="${row.Damaged_details || '-'}">
-              รายละเอียด
-            </button>
-          </td>
-        </tr>
-      `;
-        });
-      } catch (error) {
-        console.error('❌ Error fetching data:', error);
-      }
-    }
-
     // Update modal content dynamically
     const detailModal = document.getElementById('detailModal');
     detailModal.addEventListener('show.bs.modal', function (event) {
@@ -255,9 +189,6 @@
       document.getElementById('modal-receiver').textContent = button.getAttribute('data-receiver');
       document.getElementById('modal-detail').textContent = button.getAttribute('data-detail');
     });
-
-    // Fetch data on page load
-    fetchData();
   </script>
 </body>
 
