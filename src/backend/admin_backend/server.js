@@ -11,7 +11,7 @@ const allowedTables = [
     'Rooms_list_requests', 'Equipments_list_brokened', 'Admin_information',
     'Equipments_list_requests', 'Executive_information', 'Manage_computers',
     'Manage_equipments', 'Name_list_requests_rooms', 'Rooms_list_information',
-    'Schedule_time', 'Student_information', 'Teacher_information'
+    'Schedule_time', 'Student_information', 'Teacher_information', 'Equipments_list_information'
 ];
 
 // 📌 Dynamic Route for fetching any table data
@@ -33,6 +33,28 @@ app.get('/data/:table', (req, res) => {
         res.json(results);
     });
 });
+
+app.post('/updateStatus', (req, res) => {
+    const { requestId, status } = req.body;
+
+    const sql = 'UPDATE Rooms_list_requests SET Requests_status = ? WHERE Rooms_requests_ID = ?';
+    
+    connection.query(sql, [status, requestId], (err, results) => {
+        if (err) {
+            console.error('❌ Error updating status:', err);
+            return res.status(500).json({ message: 'Failed to update status' });
+        }
+
+        if (results.affectedRows === 0) {
+            // ถ้าไม่มีแถวไหนถูกอัปเดต แสดงว่า requestId อาจไม่ถูกต้อง
+            return res.status(404).json({ message: 'Request ID not found' });
+        }
+
+        console.log(`✅ Status updated for Request ID ${requestId}: ${status}`);
+        res.status(200).json({ message: 'Status updated successfully' });
+    });
+});
+
 
 // 📌 Start Server
 const PORT = process.env.PORT || 3000;
