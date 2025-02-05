@@ -299,7 +299,7 @@ CREATE TABLE `Rooms_list_requests` (
   `Start_time` time DEFAULT NULL,
   `End_time` time DEFAULT NULL,
   `Reason` enum('ขอใช้ห้องเพื่อติวหนังสือ','ขอใช้ห้องเพื่อประชุมงานกลุ่ม','ขอใช้ห้องเพื่อจัดกิจกรรมเสริมความรู้') DEFAULT NULL,
-  `Requests_status` enum('อนุมัติ','ไม่อนุมัติ') DEFAULT NULL,
+  `Requests_status` enum('รอดำเนินการ', 'รออนุมัติ', 'อนุมัติ','ไม่อนุมัติ') DEFAULT NULL,
   `Requests_types` enum('ในเวลา','นอกเวลา') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
