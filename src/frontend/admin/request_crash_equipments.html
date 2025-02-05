@@ -105,159 +105,89 @@
     </div>
   </header>
 
-  <div class="container mt-4">
-    <h3>รายการอุปกรณ์ชำรุด</h3>
-    <div class="tab-bar">
-      <div class="tab active"><a href="request_crash_equipments.html">รอซ่อม</div></a>
-      <div class="tab "><a href="wait.html">กำลังดำเนินการ</div></a>
-      <div class="tab "><a href="success.html">ซ่อมเสร็จ</div></a>
-      <div class="dropdown-container">
+  <div id="app">
+    <div class="container mt-4">
+      <h3>รายการอุปกรณ์ชำรุด</h3>
+      <div class="tab-bar">
+        <div class="tab active"><a href="request_crash_equipments.html">รอซ่อม</a></div>
+        <div class="tab"><a href="wait.html">กำลังดำเนินการ</a></div>
+        <div class="tab"><a href="success.html">ซ่อมเสร็จ</a></div>
+        <div class="dropdown-container">
           <select id="sorttime">
-              <option value="" selected>จัดเรียงตามเวลา</option>
-              <option value="oldest">เวลาเก่าที่สุด</option>
-              <option value="newest">เวลาใหม่ที่สุด</option>
+            <option value="" selected>จัดเรียงตามเวลา</option>
+            <option value="oldest">เวลาเก่าที่สุด</option>
+            <option value="newest">เวลาใหม่ที่สุด</option>
           </select>
-      </div>
-  </div>
-    <div class="table-responsive">
-      <table class="table table-bordered table-hover">
-        <thead>
-          <tr>
-            <th class="text-center">วันที่แจ้งซ่อม</th>
-            <th class="text-center">เลขแจ้งซ่อม</th>
-            <th class="text-center">ผู้แจ้งซ่อม</th>
-            <th class="text-center">อีเมล</th>
-            <th class="text-center">สถานะภาพ</th>
-            <th class="text-center">ห้อง</th>
-            <th class="text-center">อุปกรณ์ที่เเจ้งซ่อม</th>
-            <th class="text-center">ผู้รับแจ้งซ่อม</th>
-            <th class="text-center">สถานะ</th>
-            <th class="text-center">รายละเอียด</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="text-center">20 ม.ค. 2568</td>
-            <td class="text-center">308016001</td>
-            <td class="text-center">ผณิตนิภา ปัญญาวงค์</td>
-            <td class="text-center">panitpa@gmail.com</td>
-            <td class="text-center">นักศึกษา</td>
-            <td class="text-center">SC2-308</td>
-            <td class="text-center">เครื่องคอมพิวเตอร์</td>
-            <td class="text-center">นายธราศักดิ์ ชุนกองฮอ</td>
-            <td class="text-center"><span class="text-danger">รอซ่อม</span></td>
-            <td class="text-center">
-              <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" 
-                      data-bs-target="#detailModal" 
-                      data-date="20 ม.ค. 2568" 
-                      data-id="308016001" 
-                      data-reporter="ผณิตนิภา ปัญญาวงค์" 
-                      data-posi="นักศึกษา"
-                      data-room="SC2-308"
-                      data-item="เครื่องคอมพิวเตอร์" 
-                      data-image="img\OIP (1).jpg"
-                      data-receiver="นายธราศักดิ์ ชุนกองฮอ" 
-                      data-detail="เปิดติด แล้วก็ดับ"
-                      data-status="รอซ่อม">
-                รายละเอียด
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td class="text-center">21 ม.ค. 2568</td>
-            <td class="text-center">308005002</td>
-            <td class="text-center">สมชาย ลืมละ</td>
-            <td class="text-center">somchai@gmail.com</td>
-            <td class="text-center">นักศึกษา</td>
-            <td class="text-center">SC2-308</td>
-            <td class="text-center">จอคอมพิวเตอร์</td>
-            <td class="text-center">นายยุทธพงษ์ คงถาวร</td>
-            <td class="text-center"><span class="text-danger">รอซ่อม</span></td>
-            <td class="text-center">
-              <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" 
-                      data-bs-target="#detailModal" 
-                      data-date="21 ม.ค. 2568" 
-                      data-id="308005002" 
-                      data-reporter="สมชาย ลืมละ" 
-                      data-posi="นักศึกษา"
-                      data-room="SC2-308"
-                      data-item="จอคอมพิวเตอร์" 
-                      data-image="img\OIP.jpg"
-                      data-receiver="นายยุทธพงษ์ คงถาวร" 
-                      data-detail="หน้าจอได้รับความเสียหาย"
-                      data-status="รอซ่อม">
-                รายละเอียด
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- Modal -->
-  <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="detailModalLabel">รายละเอียดอุปกรณ์ชำรุด</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
-          <p><strong>วันที่แจ้งซ่อม:</strong> <span id="modal-date"></span></p>
-          <p><strong>ใบแจ้งซ่อม:</strong> <span id="modal-id"></span></p>
-          <p><strong>ผู้แจ้งซ่อม:</strong> <span id="modal-reporter"></span></p>
-          <p><strong>สถานะภาพ:</strong> <span id="modal-posi"></span></p>
-          <p><strong>ห้อง:</strong> <span id="modal-room"></span></p>
-          <p><strong>รายการแจ้งซ่อม:</strong> <span id="modal-item"></span></p>
-          <p><strong>ผู้รับแจ้งซ่อม:</strong> <span id="modal-receiver"></span></p>
-          <p><strong>สถานะ:</strong> <span id="modal-status"></span></p>
-          <p><strong>ปัญหาเพิ่มเติม:</strong> <span id="modal-detail"></span></p>
-          <div class="text-center mt-3">
-            <img id="modal-image" src="" alt="อุปกรณ์ที่แจ้งซ่อม" class="img-fluid rounded" style="max-height: 300px; object-fit: contain;">
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+          <thead>
+            <tr>
+              <th class="text-center">วันที่แจ้งซ่อม</th>
+              <th class="text-center">เลขแจ้งซ่อม</th>
+              <th class="text-center">ผู้แจ้งซ่อม</th>
+              <th class="text-center">อีเมล</th>
+              <th class="text-center">สถานะ</th>
+              <th class="text-center">ห้อง</th>
+              <th class="text-center">อุปกรณ์ที่แจ้งซ่อม</th>
+              <th class="text-center">ผู้รับแจ้งซ่อม</th>
+              <th class="text-center">รายละเอียด</th>
+            </tr>
+          </thead>
+          <tbody id="equipment-table">
+            <!-- Data will be inserted here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="detailModalLabel">รายละเอียดอุปกรณ์ชำรุด</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p><strong>วันที่แจ้งซ่อม:</strong> <span id="modal-date"></span></p>
+            <p><strong>เลขแจ้งซ่อม:</strong> <span id="modal-id"></span></p>
+            <p><strong>ผู้แจ้งซ่อม:</strong> <span id="modal-reporter"></span></p>
+            <p><strong>อีเมล:</strong> <span id="modal-email"></span></p>
+            <p><strong>สถานะ:</strong> <span id="modal-status"></span></p>
+            <p><strong>ห้อง:</strong> <span id="modal-room"></span></p>
+            <p><strong>อุปกรณ์:</strong> <span id="modal-item"></span></p>
+            <p><strong>ผู้รับแจ้งซ่อม:</strong> <span id="modal-receiver"></span></p>
+            <p><strong>รายละเอียด:</strong> <span id="modal-detail"></span></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
           </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
-        </div>
       </div>
     </div>
   </div>
 
+  <script src="BrokenEquipment.js"></script>
+  <script src="TabBarFix.js"></script>
   <!-- Bootstrap 5 Bundle JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    // JavaScript for updating modal content dynamically
+    // Update modal content dynamically
     const detailModal = document.getElementById('detailModal');
     detailModal.addEventListener('show.bs.modal', function (event) {
       const button = event.relatedTarget;
-      const date = button.getAttribute('data-date');
-      const id = button.getAttribute('data-id');
-      const reporter = button.getAttribute('data-reporter');
-      const posi = button.getAttribute('data-posi');
-      const room = button.getAttribute('data-room');
-      const item = button.getAttribute('data-item');
-      const receiver = button.getAttribute('data-receiver');
-      const status = button.getAttribute('data-status');
-      const image = button.getAttribute('data-image');
-      const detail = button.getAttribute('data-detail');
-
-      document.getElementById('modal-date').textContent = date;
-      document.getElementById('modal-id').textContent = id;
-      document.getElementById('modal-reporter').textContent = reporter;
-      document.getElementById('modal-posi').textContent = posi;
-      document.getElementById('modal-room').textContent = room;
-      document.getElementById('modal-item').textContent = item;
-      document.getElementById('modal-receiver').textContent = receiver;
-      document.getElementById('modal-status').textContent = status;
-      document.getElementById('modal-detail').textContent = detail;
-      const modalImage = document.getElementById('modal-image');
-      if (image) {
-        modalImage.src = image;
-        modalImage.style.display = "block"; // แสดงรูป
-      } else {
-        modalImage.style.display = "none"; // ซ่อนรูปถ้าไม่มี
-      }
+      document.getElementById('modal-date').textContent = button.getAttribute('data-date');
+      document.getElementById('modal-id').textContent = button.getAttribute('data-id');
+      document.getElementById('modal-reporter').textContent = button.getAttribute('data-reporter');
+      document.getElementById('modal-email').textContent = button.getAttribute('data-email');
+      document.getElementById('modal-status').textContent = button.getAttribute('data-status');
+      document.getElementById('modal-room').textContent = button.getAttribute('data-room');
+      document.getElementById('modal-item').textContent = button.getAttribute('data-item');
+      document.getElementById('modal-receiver').textContent = button.getAttribute('data-receiver');
+      document.getElementById('modal-detail').textContent = button.getAttribute('data-detail');
     });
   </script>
 </body>
