@@ -34,28 +34,6 @@ app.get('/data/:table', (req, res) => {
     });
 });
 
-app.post('/updateStatus', (req, res) => {
-    const { requestId, status } = req.body;
-
-    const sql = 'UPDATE Rooms_list_requests SET Requests_status = ? WHERE Rooms_requests_ID = ?';
-    
-    connection.query(sql, [status, requestId], (err, results) => {
-        if (err) {
-            console.error('❌ Error updating status:', err);
-            return res.status(500).json({ message: 'Failed to update status' });
-        }
-
-        if (results.affectedRows === 0) {
-            // ถ้าไม่มีแถวไหนถูกอัปเดต แสดงว่า requestId อาจไม่ถูกต้อง
-            return res.status(404).json({ message: 'Request ID not found' });
-        }
-
-        console.log(`✅ Status updated for Request ID ${requestId}: ${status}`);
-        res.status(200).json({ message: 'Status updated successfully' });
-    });
-});
-
-
 // 📌 Start Server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
