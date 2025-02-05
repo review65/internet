@@ -54,6 +54,45 @@ app.get('/mostroomalldata', (req, res) => {
     });
 });
 
+app.get('/Rooms_list_requests', (req, res) => {
+    connection.query('SELECT * FROM Rooms_list_requests', (err, results) => {
+        if (err) {
+            console.error('❌ Error:', err);
+            res.status(500).send(err);
+            return;
+        }
+        console.log('✅ ดึงข้อมูลสำเร็จจาก Rooms_list_requests:', results);
+        res.json(results);
+    });
+});
+
+
+app.get('/data/Student_information', (req, res) => {
+    connection.query('SELECT * FROM Student_information', (err, results) => {
+        if (err) {
+            console.error('❌ Error:', err);
+            res.status(500).send(err);
+            return;
+        }
+        console.log('✅ ดึงข้อมูลสำเร็จจาก Student_information:', results);
+        res.json(results);
+    });
+});
+
+app.get('/data/Teacher_information', (req, res) => {
+    connection.query('SELECT * FROM Teacher_information', (err, results) => {
+        if (err) {
+            console.error('❌ Error:', err);
+            res.status(500).send(err);
+            return;
+        }
+        console.log('✅ ดึงข้อมูลสำเร็จจาก Teacher_information:', results);
+        res.json(results);
+    });
+});
+
+
+
 // 📌 เริ่มเซิร์ฟเวอร์
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
