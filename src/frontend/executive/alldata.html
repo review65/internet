@@ -9,6 +9,13 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Bootstrap JS (พร้อม Popper.js) -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -92,14 +99,8 @@
             </h3>
           </div>
           <div>
-            <img src="graph.png" alt="graphpeople">
+            <canvas id="LineChart"></canvas>
           </div>
-          <div>
-            <p class="box-it"></p>
-            <p>จำนวนนิสิต สาขา เทคโนโลยีฯ</p><br>
-            <p class="box-com"></p>
-            <p>จำนวนนิสิต สาขา วิทยาการคอมฯ</p>
-          </div><br>
           <br><button onclick="window.location.href='grap.html'" style="border-radius: 5px;">Details</button>
         </div>
       </section>
@@ -354,7 +355,46 @@
     .catch(error => {
         console.error("❌ Error fetching data:", error);
     });
-    
+    const Linectx = document.getElementById('LineChart').getContext('2d');
+
+// สร้างข้อมูลที่ต้องการแสดงในกราฟ
+const data = {
+  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'], // ช่วงเวลา (x-axis)
+  datasets: [
+    {
+      label: 'Dataset 1', // ชื่อ dataset แรก
+      data: [65, 59, 80, 81, 56, 55, 40], // ข้อมูลค่าต่างๆ ของ dataset นี้
+      borderColor: '#622b86', // สีเส้น
+      backgroundColor: '#622b86', // สีพื้นหลังของจุดในกราฟ
+     
+    },
+    {
+      label: 'Dataset 2', // ชื่อ dataset ที่สอง
+      data: [28, 48, 40, 19, 86, 27, 90], // ข้อมูลของ dataset ที่สอง
+      borderColor: '#E54715', // สีเส้น
+      backgroundColor: '#E54715', // สีพื้นหลังของจุดในกราฟ
+     
+    }
+  ]
+};
+
+// สร้างกราฟใหม่โดยใช้ Chart.js
+new Chart(Linectx, {
+  type: 'line', // ระบุประเภทกราฟเป็น line chart
+  data: data, // กำหนดข้อมูลที่ใช้ในกราฟ
+  options: {
+    responsive: true, // ทำให้กราฟตอบสนองกับขนาดหน้าจอ
+    plugins: {
+      legend: {
+        position: 'top', // ตำแหน่งของ legend
+      },
+      title: {
+        display: true, // แสดงชื่อกราฟ
+        text: 'Line Chart Example', // ข้อความชื่อกราฟ
+      }
+    }
+  },
+});
   </script>
 </body>
 
