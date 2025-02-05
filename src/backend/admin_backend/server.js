@@ -11,7 +11,7 @@ const allowedTables = [
     'Rooms_list_requests', 'Equipments_list_brokened', 'Admin_information',
     'Equipments_list_requests', 'Executive_information', 'Manage_computers',
     'Manage_equipments', 'Name_list_requests_rooms', 'Rooms_list_information',
-    'Schedule_time', 'Student_information', 'Teacher_information'
+    'Schedule_time', 'Student_information', 'Teacher_information', 'Equipments_list_information'
 ];
 
 // 📌 Dynamic Route for fetching any table data
