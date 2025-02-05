@@ -131,7 +131,59 @@ app.get('/user', (req, res) => {
         res.json(results);
     });
 });
+<<<<<<< HEAD
 
+=======
+app.get('/roomdetail', (req, res) => {
+    const query ="SELECT rli.Rooms_name AS Name,rli.Floors, rli.Rooms_ID, SUM(CASE WHEN rlr.Requests_status = 'อนุมัติ' THEN 1 ELSE 0 END) AS Approved_Count FROM Rooms_list_information rli LEFT JOIN Rooms_list_requests rlr ON rli.Rooms_ID = rlr.Rooms_ID GROUP BY rli.Rooms_ID, rli.Rooms_name, rli.Floors ORDER BY Approved_Count DESC;"
+    connection.query( query,(err, results) => {
+        if (err) {
+            console.error('❌ เกิดข้อผิดพลาด:', err);
+            res.status(500).send(err);
+            return;
+        }
+        console.log('✅ ดึงข้อมูลสำเร็จ:', results);
+        res.json(results);
+    });
+});
+
+app.get('/Rooms_list_requests', (req, res) => {
+    connection.query('SELECT * FROM Rooms_list_requests', (err, results) => {
+        if (err) {
+            console.error('❌ Error:', err);
+            res.status(500).send(err);
+            return;
+        }
+        console.log('✅ ดึงข้อมูลสำเร็จจาก Rooms_list_requests:', results);
+        res.json(results);
+    });
+});
+
+
+app.get('/data/Student_information', (req, res) => {
+    connection.query('SELECT * FROM Student_information', (err, results) => {
+        if (err) {
+            console.error('❌ Error:', err);
+            res.status(500).send(err);
+            return;
+        }
+        console.log('✅ ดึงข้อมูลสำเร็จจาก Student_information:', results);
+        res.json(results);
+    });
+});
+
+app.get('/data/Teacher_information', (req, res) => {
+    connection.query('SELECT * FROM Teacher_information', (err, results) => {
+        if (err) {
+            console.error('❌ Error:', err);
+            res.status(500).send(err);
+            return;
+        }
+        console.log('✅ ดึงข้อมูลสำเร็จจาก Teacher_information:', results);
+        res.json(results);
+    });
+});
+>>>>>>> 2ab74f074ff937736896ec42c88103e0671b1d2a
 // 📌 เริ่มเซิร์ฟเวอร์
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
