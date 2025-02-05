@@ -78,7 +78,7 @@ app.get('/useralldata', (req, res) => {
     });
 });
 
-<<<<<<< HEAD
+
 app.get('/Rooms_list_requests', (req, res) => {
     connection.query('SELECT * FROM Rooms_list_requests', (err, results) => {
         if (err) {
@@ -118,7 +118,7 @@ app.get('/data/Teacher_information', (req, res) => {
 
 
 
-=======
+
 app.get('/user', (req, res) => {
     const query ="SELECT si.Name, si.Student_ID,si.Phone_number,si.email, COUNT(rlr.Identify_ID) AS Status FROM Rooms_list_requests rlr JOIN Student_information si ON rlr.Identify_ID = si.Student_ID GROUP BY si.Student_ID ORDER BY Status DESC ;"
     connection.query( query,(err, results) => {
@@ -131,7 +131,7 @@ app.get('/user', (req, res) => {
         res.json(results);
     });
 });
->>>>>>> 3ed069ff9a39f3ced66a1dba98b92ce556c41eab
+
 // 📌 เริ่มเซิร์ฟเวอร์
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
