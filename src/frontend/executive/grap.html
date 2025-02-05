@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> borrow equipment</title>
+    <title> broken equipment</title>
     <link rel="stylesheet" href="detailstyle.css">
     <!-- Bootstrap CSS -->
     <link
@@ -91,13 +91,13 @@
     </div>
   </div>
 
-  <div class="content-area">
+<div class="content-area">
 </head>
-<div class="container">
+<div class="container" >
   <header>
-    <h1>อุปกรณ์ที่ยืม</h1>
-    <div class="header-right">
-    <button id="openPopup">ทั้งหมด</button>
+
+      <button id="openPopup" style="margin-left: 80%;">ทั้งหมด</button>
+
   </header>
   <body>
     <div id="popup" class="popup">
@@ -125,47 +125,28 @@
         </ul>
       </div>
     </div>
-        <table>
-            <tr>
-              <td>
-                <select>
-                    <option value="Equipment">Equipment</option>
-                    <option value="mic">ไมค์</option>
-                    <option value="powerplug">ปลั๊กไฟ</option>
-                    <option value="pointer">pointer</option>
-                </select>
-            </td>
-                <td>ชื่อห้อง</td>
-                <td>จำนวนอุปกรณ์</td>
-                <td>จำนวนครั้งที่ยืม</td>
-                
-            </tr>
-        </table>
-        <hr>
-        <table>
-            <tr>
-                <td>ไมค์</td>
-                <td>SC2-211</td>
-                <td>5</td>
-                <td>30</td>
-                
-            </tr>
-            <tr>
-              <td>ปลั๊กไฟ</td>
-              <td>SC2-211</td>
-              <td>5</td>
-              <td>20</td>
-            </tr>
-            <tr>
-              <td>pointer</td>
-              <td>SC2-211</td>
-              <td>3</td>
-              <td>10</td>
-            </tr>
-            
-        </table>
-        <button onclick="window.location.href='alldata.html'">BACK</button>
+    <div style="display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;" >
+        <section> <img src="graph.png"></section>
+        <section style="align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-family: sans-serif;">
+            <h2>จำนวนการจอง</h2>
+            <p style="font-size: 30px;">20คน</p>
+            <br>
+            <p style="font-size: 30px;">วิทยาการคอมพิวเตอร์ 12 คน</p>
+            <p style="font-size: 30px;">เทคโนโลยีสารสนเทศ 8 คน</p>
+            <button onclick="window.location.href='graphdetail.html';" style="border-radius: 5px;
+            background-color: purple;">Details</button>
+        </section>
+
     </div>
+  
+  <button onclick="window.location.href='alldata.html'">BACK</button>
+  
 </body>
 <script>
   // เปิดและปิด Popup

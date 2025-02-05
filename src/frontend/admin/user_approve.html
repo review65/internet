@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,253 +8,90 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link href="executive.css" rel="stylesheet">
-
+    <style>
+        .actions2 i {
+            color: #AfAfAf;
+        }
+    </style>
 </head>
+
 <body>
     <header>
         <div class="floor-buttons">
-          <a href="floor2.html"><button>ชั้น 2</button></a>
-          <a href="floor3.html"><button>ชั้น 3</button></a>
-          <a href="Index.html"><button>ชั้น 4</button></a>
+            <a href="floor2.html"><button>ชั้น 2</button></a>
+            <a href="floor3.html"><button>ชั้น 3</button></a>
+            <a href="Index.html"><button>ชั้น 4</button></a>
         </div>
         <div class="report-buttons">
-          <button>คำร้องขอใช้งานห้อง</button>
-          <a href="request_crash_equipments.html"><button>รายงานอุปกรณ์ชำรุด</button></a>
+            <button>คำร้องขอใช้งานห้อง</button>
+            <a href="request_crash_equipments.html"><button>รายงานอุปกรณ์ชำรุด</button></a>
         </div>
         <div class="logout-button">
-          <button>ออกจากระบบ</button>
+            <button>ออกจากระบบ</button>
         </div>
-      </header>
-        <div class="main-content">
-            <div class="tab-bar">
-                <div class="tab "><a href="user_requests.html">คำขอ(10)</div></a>
-                <div class="tab active"><a href="#">อนุมัติ (15)</div></a>
-                <div class="tab "><a href="user_notapprove.html">ไม่อนุมัติ (4)</div></a>
-                <div class="dropdown-container">
-                    <select id="sorttime">
-                        <option value="oldest" selected>จัดเรียงตามเวลา</option>
-                        <option value="oldest">เวลาเก่าที่สุด</option>
-                        <option value="newest">เวลาใหม่ที่สุด</option>
-                    </select>
-                </div>
+    </header>
+
+    <div class="container mt-4">
+        <h3>รายการขอใช้ห้อง (อนุมัติแล้ว)</h3>
+        <div class="tab-bar">
+            <div class="tab"><a href="user_requests.html">คำขอ</a></div>
+            <div class="tab active"><a href="#">อนุมัติ </a></div>
+            <div class="tab"><a href="user_notapprove.html">ไม่อนุมัติ</a></div>
+            <div class="dropdown-container">
+                <select id="sorttime">
+                    <option value="oldest" selected>จัดเรียงตามเวลา</option>
+                    <option value="oldest">เวลาเก่าที่สุด</option>
+                    <option value="newest">เวลาใหม่ที่สุด</option>
+                </select>
             </div>
- 
-            
-            <table class="table">
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
-                        <th style="color: #929292;">
-                            วันที่
-                            <i class="bi bi-caret-down-fill" style="margin-left: 5px; cursor: pointer; color: #929292; font-size: 10px;" onclick="toggleCalendar()"></i>
-                        </th>
-                        <div id="dropdown-calendar" style="display: none; position: absolute; background: white; box-shadow: 0px 4px 6px rgba(0,0,0,0.1); border-radius: 5px; padding: 10px;">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                                <select id="month-select" onchange="renderCustomCalendar()"></select>
-                                <select id="year-select" onchange="renderCustomCalendar()"></select>
-                            </div>
-                            <div id="custom-calendar"></div>
-                        </div>
-                       
-                        <script>
-                            const currentDate = new Date();
-                       
-                            function toggleCalendar() {
-                                const calendar = document.getElementById("dropdown-calendar");
-                                if (calendar.style.display === "none" || calendar.style.display === "") {
-                                    calendar.style.display = "block";
-                                    initializeCalendar();
-                                } else {
-                                    calendar.style.display = "none";
-                                }
-                            }
-                       
-                            document.addEventListener("click", function (event) {
-                                const calendar = document.getElementById("dropdown-calendar");
-                                const iconElement = document.querySelector("i.bi-caret-down-fill");
-                                if (!calendar.contains(event.target) && event.target !== iconElement) {
-                                    calendar.style.display = "none";
-                                }
-                            });
-                       
-                            function initializeCalendar() {
-                                const monthSelect = document.getElementById("month-select");
-                                const yearSelect = document.getElementById("year-select");
-                       
-                                // Populate months
-                                monthSelect.innerHTML = "";
-                                const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-                                monthNames.forEach((month, index) => {
-                                    const option = document.createElement("option");
-                                    option.value = index;
-                                    option.text = month;
-                                    if (index === currentDate.getMonth()) option.selected = true;
-                                    monthSelect.appendChild(option);
-                                });
-                       
-                                // Populate years
-                                yearSelect.innerHTML = "";
-                                const startYear = currentDate.getFullYear() - 10;
-                                const endYear = currentDate.getFullYear() + 50;
-                                for (let year = startYear; year <= endYear; year++) {
-                                    const option = document.createElement("option");
-                                    option.value = year;
-                                    option.text = year;
-                                    if (year === currentDate.getFullYear()) option.selected = true;
-                                    yearSelect.appendChild(option);
-                                }
-                       
-                                renderCustomCalendar();
-                            }
-                       
-                            function renderCustomCalendar() {
-                                const calendarDiv = document.getElementById("custom-calendar");
-                                calendarDiv.innerHTML = ""; // Clear existing calendar
-                       
-                                const selectedMonth = parseInt(document.getElementById("month-select").value);
-                                const selectedYear = parseInt(document.getElementById("year-select").value);
-                       
-                                const daysInMonth = new Date(selectedYear, selectedMonth + 1, 0).getDate();
-                                const firstDay = new Date(selectedYear, selectedMonth, 1).getDay();
-                       
-                                const calendarTable = document.createElement("table");
-                                calendarTable.style.borderCollapse = "collapse";
-                                calendarTable.style.width = "100%";
-                       
-                                // Header row
-                                const headerRow = document.createElement("tr");
-                                ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].forEach(day => {
-                                    const th = document.createElement("th");
-                                    th.style.textAlign = "center";
-                                    th.innerText = day;
-                                    headerRow.appendChild(th);
-                                });
-                                calendarTable.appendChild(headerRow);
-                       
-                                // Dates
-                                let date = 1;
-                                for (let i = 0; i < 6; i++) { // Up to 6 rows
-                                    const row = document.createElement("tr");
-                                    for (let j = 0; j < 7; j++) {
-                                        const cell = document.createElement("td");
-                                        cell.style.textAlign = "center";
-                                        cell.style.padding = "5px";
-                                        cell.style.border = "1px solid #ddd";
-                                        if (i === 0 && j < firstDay) {
-                                            cell.innerText = ""; // Empty cell
-                                        } else if (date > daysInMonth) {
-                                            break;
-                                        } else {
-                                            cell.innerText = date;
-                                            cell.style.cursor = "pointer";
-                                            cell.onclick = function () {
-                                                document.getElementById("dropdown-calendar").style.display = "none";
-                                            };
-                                            date++;
-                                        }
-                                        row.appendChild(cell);
-                                    }
-                                    calendarTable.appendChild(row);
-                                }
-                       
-                                calendarDiv.appendChild(calendarTable);
-                            }
-                        </script>
-                        <th style="color: #929292;">ชื่อ-นามสกุล</th>
-                        <th style="color: #929292;">อีเมล</th>
-                        <th style="color: #929292;">สถานภาพ
-                            <div class="dropdown d-inline">
-                                <i class="bi bi-caret-down-fill" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: #929292; font-size: 10px;">
-                                </i>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">นิสิต</a></li>
-                                    <li><a class="dropdown-item" href="#">อาจารย์</a></li>
-                                    <li><a class="dropdown-item" href="#">เจ้าหน้าที่</a></li>
-                                </ul>
-                            </div>
-                        </th>
-                        <th style="color: #929292;">ห้อง
-                            <div class="dropdown d-inline">
-                                <i class="bi bi-caret-down-fill" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: #929292; font-size: 10px;">
-                                </i>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">SC2-211</a></li>
-                                    <li><a class="dropdown-item" href="#">SC2-212</a></li>
- 
-                                    <li><a class="dropdown-item" href="#">SC2-307</a></li>
-                                    <li><a class="dropdown-item" href="#">SC2-308</a></li>
-                                    <li><a class="dropdown-item" href="#">SC2-311</a></li>
-                                    <li><a class="dropdown-item" href="#">SC2-313</a></li>
-                                    <li><a class="dropdown-item" href="#">SC2-313-1</a></li>
-                                    <li><a class="dropdown-item" href="#">SC2-314</a></li>
- 
-                                    <li><a class="dropdown-item" href="#">SC2-407</a></li>
-                                    <li><a class="dropdown-item" href="#">SC2-408</a></li>
-                                    <li><a class="dropdown-item" href="#">SC2-411</a></li>
-                                    <li><a class="dropdown-item" href="#">SC2-413</a></li>
-                                    <li><a class="dropdown-item" href="#">SC2-414</a></li>
-                                    <li><a class="dropdown-item" href="#">SC2-415</a></li>
- 
-                                </ul>
-                            </div>
-                        </th>
-                        <th style="color: #929292;">เวลาจอง</th>
-                        <th style="color: #929292;">เอกสาร</th>
-                        <th style="color: #929292;">อุปกรณืที่ขอยืม
-                            <div class="dropdown d-inline">
-                                <i class="bi bi-caret-down-fill" type="button" data-bs-toggle="dropdown"
-                                    aria-expanded="false" style="color: #929292; font-size: 10px;">
-                                </i>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">ไมค์โครโฟน</a></li>
-                                    <li><a class="dropdown-item" href="#">โปรเจคเตอร์</a></li>
-                                    <li><a class="dropdown-item" href="#">สาย UTP</a></li>
-                                    <li><a class="dropdown-item" href="#">Router</a></li>
-                                    <li><a class="dropdown-item" href="#">Switch</a></li>
-                                    <li><a class="dropdown-item" href="#">Hub</a></li>
-                                </ul>
-                            </div>
-                        </th> 
-                        <th style="color: #929292;">สถานะ</th>
-                       
+                        <th style="color: #929292;">วันที่</th>
+                        <script src="dateScript.js"></script>
+                        <th class="text-center">ชื่อ-นามสกุล</th>
+                        <th class="text-center">อีเมล</th>
+                        <th class="text-center">ห้อง</th>
+                        <th class="text-center">เวลาจอง</th>
+                        <th class="text-center">เหตุผลในการขอใช้งาน</th>
+                        <th class="text-center">สถานะ</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>2567-12-1</td>
-                        <td>นายชัยวัฒน์ วรชัย</td>
-                        <td>chaiwat@nu.ac.th</td>
-                        <td>อาจารย์</td>
-                        <td>sc2-414</td>
-                        <td>2567-12-3<br>จ. 16:00 - 21:00</td>
-                        <td class="text-center"><i class="bi bi-file-earmark-pdf"></i></td>
-                        <td>ไมค์โครโฟน, โปรเจคเตอร์</td>
-                        <td class="actions2" >
-                            <i style="color: #AfAfAf;">อนุมัติแล้ว</i>
-                        </td>
-                        
-                    </tr>
-                    <tr>
-                        <td>2567-12-3</td>
-                        <td>นายสุรชัย สายคำ</td>
-                        <td>surachai65@nu.ac.th</td>
-                        <td>นิสิต</td>
-                        <td>sc2-307</td>
-                        <td>2567-12-6<br>ศ. 16.00 - 22.00</td>
-                        <td class="text-center"><i class="bi bi-file-earmark-pdf"></i></td>
-                        <td>ไมค์โครโฟน (2), โปรเจคเตอร์</td>
-                        <td class="actions2" >
-                            <i style="color: #AfAfAf;">อนุมัติแล้ว</i>
-                        </td>
-                        
-                    </tr>
-                    <!-- Add more rows here as needed -->
+                <tbody id="rooms">
+                    <!-- Data will be inserted here -->
                 </tbody>
             </table>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Modal -->
+    <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detailModalLabel">รายละเอียดการจอง</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>วันที่:</strong> <span id="modal-date"></span></p>
+                    <p><strong>ชื่อ-นามสกุล:</strong> <span id="modal-name"></span></p>
+                    <p><strong>อีเมล:</strong> <span id="modal-email"></span></p>
+                    <p><strong>ห้อง:</strong> <span id="modal-room"></span></p>
+                    <p><strong>เวลาจอง:</strong> <span id="modal-time"></span></p>
+                    <p><strong>เหตุผลในการขอใช้งาน:</strong> <span id="modal-reason"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="UserRequest.js"></script>
 </body>
+
+
 </html>
- 
- 
- 

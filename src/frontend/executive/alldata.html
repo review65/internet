@@ -203,117 +203,159 @@
         .catch((err) => console.error("Failed to load sidebar:", err));
       // end of fetch sidebar
     // Bar Chart Data
-    const barCtx = document.getElementById('barChart').getContext('2d');
-    new Chart(barCtx, {
-      type: 'bar',
-      data: {
-        labels: ['SC2-212', 'SC2-401', 'SC2-214', 'SC2-208', 'SC2-301'],
-        datasets: [
-          {
-            label: 'จำนวนนิสิตรวม',
-            data: [301, 227, 205, 200, 108],
-            backgroundColor: '#E5D2BA'
-          },
-          {
-            label: 'จำนวนนิสิต สาขา วิทยาการคอมฯ',
-            data: [177, 210, 118, 75, 50],
-            backgroundColor: '#E54715'
-          },
-          {
-            label: 'จำนวนนิสิต สาขาเทคโนโลยีฯ',
-            data: [124, 17, 87, 125, 108],
-            backgroundColor: '#622BBE'
+    fetch('http://localhost:3000/mostroomalldata')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
           }
-        ]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'bottom' // Position legend at the bottom
-          },
-          title: {
-            display: true,
-            text: 'ข้อมูลจำนวนนิสิต'
-          }
-        },
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
-    });
+          return response.json();
+        })
+        .then(data => {
+          console.log("Fetched Data:", data); // 🛠 Debug: ดูข้อมูล API
 
-    // Doughnut Chart 1 Data
-    const doughnutCtx1 = document.getElementById('doughnutChart1').getContext('2d');
-    new Chart(doughnutCtx1, {
-      type: 'doughnut',
-      data: {
-        labels: ['โปรเจกเตอร์', 'เก้าอี้', 'วิชวลไลเซอร์'],
-        datasets: [{
-          data: [10, 5, 2],
-          backgroundColor: ['#E5D2BA', '#E54715', '#622BBE'],
-          hoverOffset: 8
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'bottom' // Position legend at the bottom
-          },
-          title: {
-            display: true,
-            text: 'อุปกรณ์ที่ชำรุดบ่อย'
-          },
-          tooltip:{
-            enabled:true,
-            callbacks:{
-              label: function(tooltipItem){
-                return tooltipItem.label+':'+tooltipItem.raw;
+          const barCtx = document.getElementById('barChart').getContext('2d');
+          if (!barCtx) {
+            console.error("Canvas element not found!");
+            return;
+          }
+
+          // Prepare data for the Chart.js chart after fetching
+          const labels = data.map(item => `Room ${item.room}`);
+          const totalCount = data.map(item => item.count);
+          const csCount = data.map(item => item.cs  );
+          const itCount = data.map(item => item.it );
+
+          new Chart(barCtx, {
+            type: 'bar',
+            data: {
+              labels: labels,
+              datasets: [
+                {
+                  label: 'จำนวนนิสิตรวม',
+                  data: totalCount,
+                  backgroundColor: '#E5D2BA'
+                },
+                {
+                  label: 'จำนวนนิสิต สาขา วิทยาการคอมฯ',
+                  data: csCount,
+                  backgroundColor: '#E54715'
+                },
+                {
+                  label: 'จำนวนนิสิต สาขาเทคโนโลยีฯ',
+                  data: itCount,
+                  backgroundColor: '#622BBE'
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              plugins: {
+                legend: {
+                  position: 'bottom' // Position legend at the bottom
+                },
+                title: {
+                  display: true,
+                  text: 'ข้อมูลจำนวนนิสิต'
+                }
+              },
+              scales: {
+                y: {
+                  beginAtZero: true
+                }
               }
             }
-          },
+          });
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
+    // Doughnut Chart 1 Data
+  fetch('http://localhost:3000/brokendEquipment')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
-      }
+        return response.json();
+    })
+    .then(data => {
+        console.log("Fetched Data:", data); // 🛠 Debug: ดูข้อมูล API
+        
+        const doughnutCtx1 = document.getElementById('doughnutChart1');
+
+
+        if (!doughnutCtx1) {
+            console.error("Canvas element donut not found!");
+            return;
+        }
+
+        new Chart(doughnutCtx1.getContext('2d'), {  // ✅ ใช้ .getContext('2d') ตรงนี้
+            type: 'doughnut',
+            data: {
+                labels: data.map(item => item.Equipments_name), // ✅ ใช้คีย์ที่ถูกต้อง
+                datasets: [{
+                    data: data.map(item => item.count),
+                    backgroundColor: ['#E5D2BA', '#E54715', '#622BBE'], // ✅ กำหนดสี
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    title: { display: true, text: 'จำนวนอุปกรณ์ที่เสีย' }
+                }
+            }
+        });
+    })
+    .catch(error => {
+        console.error("❌ Error fetching data:", error);
     });
+    
+
+
+
 
     // Doughnut Chart 2 Data
-    const doughnutCtx2 = document.getElementById('doughnutChart2').getContext('2d');
-    new Chart(doughnutCtx2, {
-      type: 'doughnut',
-      data: {
-        labels: ['ไมค์', 'ปลี๊กไฟ', 'Pointer'],
-        datasets: [{
-          data: [8, 12, 5],
-          backgroundColor: ['#E5D2BA', '#E54715', '#622BBE'],
-          hoverOffset: 8
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'bottom' // Position legend at the bottom
-          },
-          title: {
-            display: true,
-            text: 'อุปกรณ์ที่ยืมบ่อย'
-          },
-          tooltip:{
-            enabled:true,
-            callbacks:{
-              label: function(tooltipItem){
-                return tooltipItem.label+':'+tooltipItem.raw;
-              }
-            }
-          },
+    fetch('http://localhost:3000/borrowEquipment')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
-      }
+        return response.json();
+    })
+    .then(data => {
+        console.log("Fetched Data:", data); // 🛠 Debug: ดูข้อมูล API
+        
+        const doughnutCtx2 = document.getElementById('doughnutChart2');
+
+
+        if (!doughnutCtx2) {
+            console.error("Canvas element donut not found!");
+            return;
+        }
+
+        new Chart(doughnutCtx2.getContext('2d'), {  // ✅ ใช้ .getContext('2d') ตรงนี้
+            type: 'doughnut',
+            data: {
+                labels: data.map(item => item.Equipments_name), // ✅ ใช้คีย์ที่ถูกต้อง
+                datasets: [{
+                    data: data.map(item => item.count),
+                    backgroundColor: ['#E5D2BA', '#E54715', '#622BBE'], // ✅ กำหนดสี
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    title: { display: true, text: 'จำนวนอุปกรณ์ที่เสีย' }
+                }
+            }
+        });
+    })
+    .catch(error => {
+        console.error("❌ Error fetching data:", error);
     });
+    
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
