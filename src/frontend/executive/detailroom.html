@@ -93,20 +93,56 @@
 
   <div class="content-area">
 </head>
+<div class="container">
+<header>
+  <h1>ห้อง</h1>
+  <div class="header-right">
+  <button id="openPopup">ทั้งหมด</button>
+  </div>
+</header>
 <body>
-    
-    <div class="container">
-        <h1>ห้อง</h1>
+  <div id="popup" class="popup">
+    <div class="popup-content">
+      <span id="closePopup" class="close-btn">&times;</span>
+      <h2>เลือกตัวกรอง</h2>
+      <ul>
+        <li><button class="filter-option" data-filter="all">ทั้งหมด</button></li>
+        <li><button class="filter-option" data-filter="today">วันนี้</button></li>
+        <li><button class="filter-option" data-filter="yesterday">เมื่อวานนี้</button></li>
+        <li><button class="filter-option" data-filter="this-week">สัปดาห์นี้</button></li>
+        <li><button class="filter-option" data-filter="last-week">สัปดาห์ที่แล้ว</button></li>
+        <li><button class="filter-option" data-filter="this-month">เดือนนี้</button></li>
+        <li><button class="filter-option" data-filter="last-month">เดือนที่แล้ว</button></li>
+        <li><button class="filter-option" data-filter="this-year">ปีนี้</button></li>
+        <li><button class="filter-option" data-filter="last-year">ปีที่แล้ว</button></li>
+
+        <!-- วันเริ่มต้น -->
+        <label for="startDate">เลือกวันเริ่มต้น:</label>
+        <input type="date" id="startDate">
+        
+        <!-- วันสิ้นสุด -->
+        <label for="endDate">เลือกวันสิ้นสุด:</label>
+        <input type="date" id="endDate" style="display:none;"> <!-- ซ่อนวันสิ้นสุดจนกว่าจะเลือกวันเริ่มต้น -->
+      </ul>
+    </div>
+  </div>
         <table>
             <tr>
-                <td>Room</td>
+              <td>
+                <select id="roomDropdown">
+                    <option value="allroom">room</option>
+                    <option value="room1">SC2-211</option>
+                    <option value="room2">SC2-212</option>
+                    <option value="room3">SC2-311</option>
+                </select>
+            </td>
                 <td>ชั้น</td>
                 <td>ห้อง</td>
                 <td>จำนวนนั้งสุทธิ</td>
                 <td>จำนวนการยืม</td>
             </tr>
         </table>
-        <hr>
+        <hr id="hr-line">
         <table>
             <tr>
                 <td>SC2-212</td>
@@ -133,4 +169,83 @@
         <button onclick="window.location.href='alldata.html'">BACK</button>
     </div>
 </body>
+<script>
+// เปิดและปิด Popup
+const openPopupBtn = document.getElementById("openPopup");
+const popup = document.getElementById("popup");
+const closePopupBtn = document.getElementById("closePopup");
+const startDateInput = document.getElementById("startDate");
+const endDateInput = document.getElementById("endDate");
+
+openPopupBtn.addEventListener("click", () => {
+  popup.style.display = "flex"; // เปิด Popup
+});
+
+closePopupBtn.addEventListener("click", () => {
+  popup.style.display = "none"; // ปิด Popup
+});
+
+window.addEventListener("click", (e) => {
+  if (e.target === popup) {
+    popup.style.display = "none"; // ปิด Popup เมื่อคลิกนอก Popup
+  }
+});
+
+// เมื่อเลือกวันเริ่มต้น
+startDateInput.addEventListener("change", () => {
+  const startDate = startDateInput.value;
+  if (startDate) {
+    // แสดงปฏิทินสำหรับเลือกวันสิ้นสุด
+    endDateInput.style.display = "inline-block";
+    
+    // ตั้งค่าวันสิ้นสุดเป็นวันถัดไปจากวันเริ่มต้น
+    const endDate = new Date(startDate);
+    endDate.setDate(endDate.getDate() + 1); // เพิ่ม 1 วันให้กับวันเริ่มต้น
+
+    // แปลงเป็นรูปแบบที่สามารถแสดงใน input[type="date"]
+    const endDateString = endDate.toISOString().split("T")[0];
+    
+    // ตั้งค่าวันสิ้นสุด
+    endDateInput.value = endDateString;
+
+    // แสดงผลข้อความในปุ่ม #openPopup
+    openPopupBtn.textContent = `เลือกช่วงเวลา: ${startDate} ถึง ${endDateString}`;
+  }
+});
+
+// เมื่อเลือกวันสิ้นสุด
+endDateInput.addEventListener("change", () => {
+  const startDate = startDateInput.value;
+  const endDate = endDateInput.value;
+  if (startDate && endDate) {
+    // อัพเดตข้อความในปุ่ม
+    openPopupBtn.textContent = `เลือกช่วงเวลา: ${startDate} ถึง ${endDate}`;
+    popup.style.display = "none"; // ปิด Popup หลังจากเลือกช่วงเวลา
+  }
+});
+
+// ให้ปุ่มอื่นๆ ใน popup คลิกได้
+const filterOptions = document.querySelectorAll(".filter-option");
+
+filterOptions.forEach((option) => {
+  option.addEventListener("click", (e) => {
+    const selectedFilter = e.target.dataset.filter;
+    console.log("Selected Filter:", selectedFilter);
+    openPopupBtn.textContent = e.target.textContent; // เปลี่ยนข้อความในปุ่ม
+    popup.style.display = "none"; // ปิด Popup หลังจากเลือกตัวกรอง
+  });
+});
+// เมื่อเปิด popup
+openPopupBtn.addEventListener("click", () => {
+  popup.style.display = "flex"; // เปิด Popup
+  document.getElementById("hr-line").classList.add("hidden"); // ซ่อน <hr>
+});
+
+// เมื่อปิด popup
+closePopupBtn.addEventListener("click", () => {
+  popup.style.display = "none"; // ปิด Popup
+  document.getElementById("hr-line").classList.remove("hidden"); // แสดง <hr> อีกครั้ง
+});
+
+</script>
 </html>
