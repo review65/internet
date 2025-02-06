@@ -65,6 +65,18 @@ app.get('/daysroom', (req, res) => {
         res.json(results);
     });
 });
+app.get('/detailsdaysroom', (req, res) => {
+    const query ="SELECT 'รวมทั้งหมด' AS DayName, SUM(db.CS_Count) AS Cs, SUM(db.IT_Count) AS It, SUM(db.CS_Count + db.IT_Count) AS TotalCount FROM (SELECT DAYOFWEEK(rr.Used_date) AS DayOfWeek, SUM(CASE WHEN s.Department = 'วิทยาการคอมพิวเตอร์' THEN 1 ELSE 0 END) AS CS_Count, SUM(CASE WHEN s.Department = 'เทคโนโลยีสารสนเทศ' THEN 1 ELSE 0 END) AS IT_Count FROM Rooms_list_requests rr JOIN Student_information s ON rr.Identify_ID = s.Student_ID WHERE s.Department IN ('วิทยาการคอมพิวเตอร์', 'เทคโนโลยีสารสนเทศ') GROUP BY DAYOFWEEK(rr.Used_date)) db;"
+    connection.query( query,(err, results) => {
+        if (err) {
+            console.error('❌ เกิดข้อผิดพลาด:', err);
+            res.status(500).send(err);
+            return;
+        }
+        console.log('✅ ดึงข้อมูลสำเร็จ:', results);
+        res.json(results);
+    });
+});
 app.get('/useralldata', (req, res) => {
     const query ="SELECT si.Name, si.Student_ID,si.Phone_number,si.email, COUNT(rlr.Identify_ID) AS Status FROM Rooms_list_requests rlr JOIN Student_information si ON rlr.Identify_ID = si.Student_ID GROUP BY si.Student_ID ORDER BY Status DESC LIMIT 3;"
     connection.query( query,(err, results) => {
@@ -78,6 +90,47 @@ app.get('/useralldata', (req, res) => {
     });
 });
 
+
+app.get('/Rooms_list_requests', (req, res) => {
+    connection.query('SELECT * FROM Rooms_list_requests', (err, results) => {
+        if (err) {
+            console.error('❌ Error:', err);
+            res.status(500).send(err);
+            return;
+        }
+        console.log('✅ ดึงข้อมูลสำเร็จจาก Rooms_list_requests:', results);
+        res.json(results);
+    });
+});
+
+
+app.get('/data/Student_information', (req, res) => {
+    connection.query('SELECT * FROM Student_information', (err, results) => {
+        if (err) {
+            console.error('❌ Error:', err);
+            res.status(500).send(err);
+            return;
+        }
+        console.log('✅ ดึงข้อมูลสำเร็จจาก Student_information:', results);
+        res.json(results);
+    });
+});
+
+app.get('/data/Teacher_information', (req, res) => {
+    connection.query('SELECT * FROM Teacher_information', (err, results) => {
+        if (err) {
+            console.error('❌ Error:', err);
+            res.status(500).send(err);
+            return;
+        }
+        console.log('✅ ดึงข้อมูลสำเร็จจาก Teacher_information:', results);
+        res.json(results);
+    });
+});
+
+
+
+
 app.get('/user', (req, res) => {
     const query ="SELECT si.Name, si.Student_ID,si.Phone_number,si.email, COUNT(rlr.Identify_ID) AS Status FROM Rooms_list_requests rlr JOIN Student_information si ON rlr.Identify_ID = si.Student_ID GROUP BY si.Student_ID ORDER BY Status DESC ;"
     connection.query( query,(err, results) => {
@@ -90,6 +143,9 @@ app.get('/user', (req, res) => {
         res.json(results);
     });
 });
+
+
+
 app.get('/roomdetail', (req, res) => {
     const query ="SELECT rli.Rooms_name AS Name,rli.Floors, rli.Rooms_ID, SUM(CASE WHEN rlr.Requests_status = 'อนุมัติ' THEN 1 ELSE 0 END) AS Approved_Count FROM Rooms_list_information rli LEFT JOIN Rooms_list_requests rlr ON rli.Rooms_ID = rlr.Rooms_ID GROUP BY rli.Rooms_ID, rli.Rooms_name, rli.Floors ORDER BY Approved_Count;"
     connection.query( query,(err, results) => {
@@ -102,6 +158,79 @@ app.get('/roomdetail', (req, res) => {
         res.json(results);
     });
 });
+
+
+app.get('/Rooms_list_requests', (req, res) => {
+    connection.query('SELECT * FROM Rooms_list_requests', (err, results) => {
+        if (err) {
+            console.error('❌ Error:', err);
+            res.status(500).send(err);
+            return;
+        }
+        console.log('✅ ดึงข้อมูลสำเร็จจาก Rooms_list_requests:', results);
+        res.json(results);
+    });
+});
+
+
+app.get('/data/Student_information', (req, res) => {
+    connection.query('SELECT * FROM Student_information', (err, results) => {
+        if (err) {
+            console.error('❌ Error:', err);
+            res.status(500).send(err);
+            return;
+        }
+        console.log('✅ ดึงข้อมูลสำเร็จจาก Student_information:', results);
+        res.json(results);
+    });
+});
+
+app.get('/data/Teacher_information', (req, res) => {
+    connection.query('SELECT * FROM Teacher_information', (err, results) => {
+        if (err) {
+            console.error('❌ Error:', err);
+            res.status(500).send(err);
+            return;
+        }
+        console.log('✅ ดึงข้อมูลสำเร็จจาก Teacher_information:', results);
+        res.json(results);
+    });
+});
+
+app.post('/updateStatus', (req, res) => {
+    const { requestId, status } = req.body;
+
+    const sql = 'UPDATE Rooms_list_requests SET Requests_status = ? WHERE Rooms_requests_ID = ?';
+    
+    connection.query(sql, [status, requestId], (err, results) => {
+        if (err) {
+            console.error('❌ Error updating status:', err);
+            return res.status(500).json({ message: 'Failed to update status' });
+        }
+
+        if (results.affectedRows === 0) {
+            // ถ้าไม่มีแถวไหนถูกอัปเดต แสดงว่า requestId อาจไม่ถูกต้อง
+            return res.status(404).json({ message: 'Request ID not found' });
+        }
+
+        console.log(`✅ Status updated for Request ID ${requestId}: ${status}`);
+        res.status(200).json({ message: 'Status updated successfully' });
+    });
+});
+
+
+app.get('/TableBorrowEquipment', (req, res) => {
+    connection.query('SELECT e.Equipments_name AS equipmentname, r.Rooms_name AS roomname, e.Equipments_amount, COUNT(er.Rooms_requests_ID) AS total_borrowed_times FROM Equipments_list_requests er JOIN Equipments_list_information e ON er.Equipments_ID = e.Equipments_ID JOIN Rooms_list_requests rr ON er.Rooms_requests_ID = rr.Rooms_requests_ID JOIN Rooms_list_information r ON rr.Rooms_ID = r.Rooms_ID GROUP BY e.Equipments_name, r.Rooms_name, e.Equipments_amount ORDER BY e.Equipments_name, r.Rooms_name;', (err, results) => {
+        if (err) {
+            console.error('❌ Error:', err);
+            res.status(500).send(err);
+            return;
+        }
+        console.log('✅ ดึงข้อมูลสำเร็จจาก Teacher_information:', results);
+        res.json(results);
+    });
+});
+
 // 📌 เริ่มเซิร์ฟเวอร์
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
