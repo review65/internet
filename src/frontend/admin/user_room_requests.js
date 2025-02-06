@@ -43,10 +43,10 @@ async function fetchData() {
                     <td class="text-center">${row.Reason}</td>
                     <td class="text-center">
                         ${
-                            row.Requests_status === 'รอดำเนินการ'
-                                ? '<span class="badge bg-warning">รอดำเนินการ</span>'
+                            row.Requests_status === 'รออนุมัติ'
+                                ? '<span class="badge bg-warning">รออนุมัติ</span>'
                                 : `
-                                    <button class="btn btn-success btn-sm" onclick="updateStatus(${row.Rooms_requests_ID}, 'รอดำเนินการ')">✅ อนุมัติ</button>
+                                    <button class="btn btn-success btn-sm" onclick="updateStatus(${row.Rooms_requests_ID}, 'รออนุมัติ')">✅ อนุมัติ</button>
                                     <button class="btn btn-danger btn-sm" onclick="updateStatus(${row.Rooms_requests_ID}, 'ไม่อนุมัติ')">❌ ไม่อนุมัติ</button>
                                   `
                         }
