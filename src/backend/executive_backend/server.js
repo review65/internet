@@ -219,7 +219,17 @@ app.post('/updateStatus', (req, res) => {
 });
 
 
-
+app.get('/TableBorrowEquipment', (req, res) => {
+    connection.query('SELECT e.Equipments_name AS equipmentname, r.Rooms_name AS roomname, e.Equipments_amount, COUNT(er.Rooms_requests_ID) AS total_borrowed_times FROM Equipments_list_requests er JOIN Equipments_list_information e ON er.Equipments_ID = e.Equipments_ID JOIN Rooms_list_requests rr ON er.Rooms_requests_ID = rr.Rooms_requests_ID JOIN Rooms_list_information r ON rr.Rooms_ID = r.Rooms_ID GROUP BY e.Equipments_name, r.Rooms_name, e.Equipments_amount ORDER BY e.Equipments_name, r.Rooms_name;', (err, results) => {
+        if (err) {
+            console.error('❌ Error:', err);
+            res.status(500).send(err);
+            return;
+        }
+        console.log('✅ ดึงข้อมูลสำเร็จจาก Teacher_information:', results);
+        res.json(results);
+    });
+});
 
 // 📌 เริ่มเซิร์ฟเวอร์
 const PORT = process.env.PORT || 3000;
