@@ -55,6 +55,19 @@ app.post('/updateStatus', (req, res) => {
     });
 });
 
+app.post('/updateScheduleStatus', (req, res) => {
+    const { scheduleId, status } = req.body;
+
+    const sql = `UPDATE Schedule_time SET Rooms_status = ? WHERE Schedule_ID = ?`;
+    connection.query(sql, [status, scheduleId], (err, result) => {
+        if (err) {
+            console.error('❌ Error updating schedule status:', err);
+            return res.status(500).json({ message: 'Failed to update status' });
+        }
+        res.status(200).json({ message: 'Status updated successfully' });
+    });
+});
+
 
 // 📌 Start Server
 const PORT = process.env.PORT || 3000;
