@@ -42,7 +42,7 @@ app.get('/borrowEquipment', (req, res) => {
     });
 });
 app.get('/mostroomalldata', (req, res) => {
-    const query ="SELECT rlr.Rooms_ID AS room,rlr.Identify_ID AS id,SUM(CASE WHEN si.Department = 'วิทยาการคอมพิวเตอร์' THEN 1 ELSE 0 END) AS cs,SUM(CASE WHEN si.Department = 'เทคโนโลยีสารสนเทศ' THEN 1 ELSE 0 END) AS it, COUNT(*) AS count FROM Rooms_list_requests rlr LEFT JOIN Student_information si ON rlr.Identify_ID = si.Student_ID GROUP BY rlr.Rooms_ID, rlr.Identify_ID;"
+    const query ="WITH RoomUsage AS (SELECT rr.Rooms_ID, s.Department, COUNT(*) AS UsageCount FROM Rooms_list_requests rr JOIN Student_information s ON rr.Identify_ID = s.Student_ID WHERE s.Department IN ('วิทยาการคอมพิวเตอร์', 'เทคโนโลยีสารสนเทศ') GROUP BY rr.Rooms_ID, s.Department) SELECT ru.Rooms_ID AS Room, COALESCE(SUM(CASE WHEN ru.Department = 'วิทยาการคอมพิวเตอร์' THEN ru.UsageCount END), 0) AS cs, COALESCE(SUM(CASE WHEN ru.Department = 'เทคโนโลยีสารสนเทศ' THEN ru.UsageCount END), 0) AS it, SUM(ru.UsageCount) AS total FROM RoomUsage ru GROUP BY ru.Rooms_ID ORDER BY total DESC;"
     connection.query( query,(err, results) => {
         if (err) {
             console.error('❌ เกิดข้อผิดพลาด:', err);
@@ -54,7 +54,7 @@ app.get('/mostroomalldata', (req, res) => {
     });
 });
 app.get('/daysroom', (req, res) => {
-    const query ="SELECT rlr.Rooms_ID AS room,rlr.Identify_ID AS id,SUM(CASE WHEN si.Department = 'วิทยาการคอมพิวเตอร์' THEN 1 ELSE 0 END) AS cs,SUM(CASE WHEN si.Department = 'เทคโนโลยีสารสนเทศ' THEN 1 ELSE 0 END) AS it,COUNT(*) AS count,CASE WHEN DAYOFWEEK(rlr.Used_Date) = 1 THEN 'อาทิตย์'WHEN DAYOFWEEK(rlr.Used_Date) = 2 THEN 'จันทร์'WHEN DAYOFWEEK(rlr.Used_Date) = 3 THEN 'อังคาร'WHEN DAYOFWEEK(rlr.Used_Date) = 4 THEN 'พุธ'WHEN DAYOFWEEK(rlr.Used_Date) = 5 THEN 'พฤหัสบดี'WHEN DAYOFWEEK(rlr.Used_Date) = 6 THEN 'ศุกร์'WHEN DAYOFWEEK(rlr.Used_Date) = 7 THEN 'เสาร์' END AS day_of_week FROM Rooms_list_requests rlr LEFT JOIN Student_information si ON rlr.Identify_ID = si.Student_ID GROUP BY   rlr.Rooms_ID, rlr.Identify_ID, day_of_week;"
+    const query ="WITH DailyBookings AS (SELECT DAYOFWEEK(rr.Used_date) AS DayOfWeek,SUM(CASE WHEN s.Department = 'วิทยาการคอมพิวเตอร์' THEN 1 ELSE 0 END) AS CS_Count,SUM(CASE WHEN s.Department = 'เทคโนโลยีสารสนเทศ' THEN 1 ELSE 0 END) AS IT_Count FROM Rooms_list_requests rr JOIN Student_information s ON rr.Identify_ID = s.Student_ID WHERE s.Department IN ('วิทยาการคอมพิวเตอร์', 'เทคโนโลยีสารสนเทศ') GROUP BY DAYOFWEEK(rr.Used_date))SELECT CASE WHEN db.DayOfWeek = 1 THEN 'อาทิตย์' WHEN db.DayOfWeek = 2 THEN 'จันทร์' WHEN db.DayOfWeek = 3 THEN 'อังคาร' WHEN db.DayOfWeek = 4 THEN 'พุธ' WHEN db.DayOfWeek = 5 THEN 'พฤหัสบดี' WHEN db.DayOfWeek = 6 THEN 'ศุกร์' WHEN db.DayOfWeek = 7 THEN 'เสาร์' END AS DayName,db.CS_Count AS Cs,db.IT_Count AS It,(db.CS_Count + db.IT_Count) AS TotalCount FROM DailyBookings db ORDER BY db.DayOfWeek;"
     connection.query( query,(err, results) => {
         if (err) {
             console.error('❌ เกิดข้อผิดพลาด:', err);
@@ -91,7 +91,7 @@ app.get('/user', (req, res) => {
     });
 });
 app.get('/roomdetail', (req, res) => {
-    const query ="SELECT rli.Rooms_name AS Name,rli.Floors, rli.Rooms_ID, SUM(CASE WHEN rlr.Requests_status = 'อนุมัติ' THEN 1 ELSE 0 END) AS Approved_Count FROM Rooms_list_information rli LEFT JOIN Rooms_list_requests rlr ON rli.Rooms_ID = rlr.Rooms_ID GROUP BY rli.Rooms_ID, rli.Rooms_name, rli.Floors ORDER BY Approved_Count DESC;"
+    const query ="SELECT rli.Rooms_name AS Name,rli.Floors, rli.Rooms_ID, SUM(CASE WHEN rlr.Requests_status = 'อนุมัติ' THEN 1 ELSE 0 END) AS Approved_Count FROM Rooms_list_information rli LEFT JOIN Rooms_list_requests rlr ON rli.Rooms_ID = rlr.Rooms_ID GROUP BY rli.Rooms_ID, rli.Rooms_name, rli.Floors ORDER BY Approved_Count;"
     connection.query( query,(err, results) => {
         if (err) {
             console.error('❌ เกิดข้อผิดพลาด:', err);
@@ -99,43 +99,6 @@ app.get('/roomdetail', (req, res) => {
             return;
         }
         console.log('✅ ดึงข้อมูลสำเร็จ:', results);
-        res.json(results);
-    });
-});
-
-app.get('/Rooms_list_requests', (req, res) => {
-    connection.query('SELECT * FROM Rooms_list_requests', (err, results) => {
-        if (err) {
-            console.error('❌ Error:', err);
-            res.status(500).send(err);
-            return;
-        }
-        console.log('✅ ดึงข้อมูลสำเร็จจาก Rooms_list_requests:', results);
-        res.json(results);
-    });
-});
-
-
-app.get('/data/Student_information', (req, res) => {
-    connection.query('SELECT * FROM Student_information', (err, results) => {
-        if (err) {
-            console.error('❌ Error:', err);
-            res.status(500).send(err);
-            return;
-        }
-        console.log('✅ ดึงข้อมูลสำเร็จจาก Student_information:', results);
-        res.json(results);
-    });
-});
-
-app.get('/data/Teacher_information', (req, res) => {
-    connection.query('SELECT * FROM Teacher_information', (err, results) => {
-        if (err) {
-            console.error('❌ Error:', err);
-            res.status(500).send(err);
-            return;
-        }
-        console.log('✅ ดึงข้อมูลสำเร็จจาก Teacher_information:', results);
         res.json(results);
     });
 });
