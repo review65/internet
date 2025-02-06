@@ -141,44 +141,12 @@
             </tr>
         </table>
         <hr>
-        <table>
-            <tr>
-                <td>นาย คำมี สาเก</td>
-                <td>65314449</td>
-                <td>0111111111</td>
-                <td>kammees65@nu.ac.th</td>
-                <td>5</td>
-            </tr>
-            <tr>
-                <td>นายสาว อุ้งอิ้ง องค์กร</td>
-                <td>66314879</td>
-                <td>0222222222</td>
-                <td>ungingo66@nu.ac.th</td>
-                <td>3</td>
-            </tr>
-            <tr>
-                <td>นาย ธีรพงษ์ พาสุข</td>
-                <td>66519787</td>
-                <td>0333333333</td>
-                <td>theerapongp66@nu.ac.th</td>
-                <td>2</td>
-            </tr>
-            <tr>
-                <td>นาย ทรงชัย ธรรมะ</td>
-                <td>37314589</td>
-                <td>0444444444</td>
-                <td>songchait67@nu.ac.th</td>
-                <td>1</td>
-            </tr>
-            <tr>
-              <td>นาย ธนภัทร สุรินทร์</td>
-              <td>67815695</td>
-              <td>0555555555</td>
-              <td>thanaphats67@nu.ac.th</td>
-              <td>1</td>
-          </tr>
-            
-        </table>
+      <table>
+        <tbody id="userTable">
+        <tr><td colspan="5">กำลังโหลดข้อมูล...</td></tr>
+    </tbody>
+  </table>
+        
         <button onclick="window.location.href='alldata.html'">BACK</button>
     </div>
 </body>
@@ -248,6 +216,28 @@
       popup.style.display = "none"; // ปิด Popup หลังจากเลือกตัวกรอง
     });
   });
+  fetch("http://localhost:3000/user")
+            .then(response => response.json()) // แปลง JSON
+            .then(data => {
+                const tableBody = document.getElementById("userTable");
+                tableBody.innerHTML = ""; // เคลียร์ข้อมูลเก่า
+
+                data.forEach(user => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${user.Name}</td>
+                        <td>${user.Student_ID}</td>
+                        <td>${user.Phone_number}</td>
+                        <td>${user.email}</td>
+                        <td>${user.Status}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            })
+            .catch(error => {
+                console.error("เกิดข้อผิดพลาด:", error);
+                document.getElementById("userTable").innerHTML = "<tr><td colspan='5'>ไม่สามารถโหลดข้อมูลได้</td></tr>";
+            });
   
   </script>
 </html>
