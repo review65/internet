@@ -65,6 +65,18 @@ app.get('/daysroom', (req, res) => {
         res.json(results);
     });
 });
+app.get('/detailsdaysroom', (req, res) => {
+    const query ="SELECT 'รวมทั้งหมด' AS DayName, SUM(db.CS_Count) AS Cs, SUM(db.IT_Count) AS It, SUM(db.CS_Count + db.IT_Count) AS TotalCount FROM (SELECT DAYOFWEEK(rr.Used_date) AS DayOfWeek, SUM(CASE WHEN s.Department = 'วิทยาการคอมพิวเตอร์' THEN 1 ELSE 0 END) AS CS_Count, SUM(CASE WHEN s.Department = 'เทคโนโลยีสารสนเทศ' THEN 1 ELSE 0 END) AS IT_Count FROM Rooms_list_requests rr JOIN Student_information s ON rr.Identify_ID = s.Student_ID WHERE s.Department IN ('วิทยาการคอมพิวเตอร์', 'เทคโนโลยีสารสนเทศ') GROUP BY DAYOFWEEK(rr.Used_date)) db;"
+    connection.query( query,(err, results) => {
+        if (err) {
+            console.error('❌ เกิดข้อผิดพลาด:', err);
+            res.status(500).send(err);
+            return;
+        }
+        console.log('✅ ดึงข้อมูลสำเร็จ:', results);
+        res.json(results);
+    });
+});
 app.get('/useralldata', (req, res) => {
     const query ="SELECT si.Name, si.Student_ID,si.Phone_number,si.email, COUNT(rlr.Identify_ID) AS Status FROM Rooms_list_requests rlr JOIN Student_information si ON rlr.Identify_ID = si.Student_ID GROUP BY si.Student_ID ORDER BY Status DESC LIMIT 3;"
     connection.query( query,(err, results) => {
