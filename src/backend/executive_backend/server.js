@@ -131,9 +131,9 @@ app.get('/user', (req, res) => {
         res.json(results);
     });
 });
-<<<<<<< HEAD
 
-=======
+
+
 app.get('/roomdetail', (req, res) => {
     const query ="SELECT rli.Rooms_name AS Name,rli.Floors, rli.Rooms_ID, SUM(CASE WHEN rlr.Requests_status = 'อนุมัติ' THEN 1 ELSE 0 END) AS Approved_Count FROM Rooms_list_information rli LEFT JOIN Rooms_list_requests rlr ON rli.Rooms_ID = rlr.Rooms_ID GROUP BY rli.Rooms_ID, rli.Rooms_name, rli.Floors ORDER BY Approved_Count DESC;"
     connection.query( query,(err, results) => {
@@ -183,7 +183,30 @@ app.get('/data/Teacher_information', (req, res) => {
         res.json(results);
     });
 });
->>>>>>> 2ab74f074ff937736896ec42c88103e0671b1d2a
+
+app.post('/updateStatus', (req, res) => {
+    const { requestId, status } = req.body;
+
+    const sql = 'UPDATE Rooms_list_requests SET Requests_status = ? WHERE Rooms_requests_ID = ?';
+    
+    connection.query(sql, [status, requestId], (err, results) => {
+        if (err) {
+            console.error('❌ Error updating status:', err);
+            return res.status(500).json({ message: 'Failed to update status' });
+        }
+
+        if (results.affectedRows === 0) {
+            // ถ้าไม่มีแถวไหนถูกอัปเดต แสดงว่า requestId อาจไม่ถูกต้อง
+            return res.status(404).json({ message: 'Request ID not found' });
+        }
+
+        console.log(`✅ Status updated for Request ID ${requestId}: ${status}`);
+        res.status(200).json({ message: 'Status updated successfully' });
+    });
+});
+
+
+
 // 📌 เริ่มเซิร์ฟเวอร์
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
