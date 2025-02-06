@@ -99,9 +99,10 @@
             </h3>
           </div>
           <div>
-            <canvas id="barChart2" ></canvas>
+            <canvas id="barChart2" style="height: 630px; width: 100%; "></canvas>
+
           </div>
-          <br><button onclick="window.location.href='grap.html'" style="border-radius: 5px;">Details</button>
+          <br><button onclick="window.location.href='grap.html'" style="border-radius: 5px; margin-top: 2rem;">Details</button>
         </div>
       </section>
 
@@ -207,8 +208,8 @@
           }
 
           // Prepare data for the Chart.js chart after fetching
-          const labels = data.map(item => `Room ${item.room}`);
-          const totalCount = data.map(item => item.count);
+          const labels = data.map(item => `SC2-${item.Room}`);
+          const totalCount = data.map(item => item.total);
           const csCount = data.map(item => item.cs  );
           const itCount = data.map(item => item.it );
 
@@ -230,27 +231,54 @@
                 {
                   label: 'จำนวนนิสิต สาขาเทคโนโลยีฯ',
                   data: itCount,
-                  backgroundColor: '#622BBE'
+                  backgroundColor: '#622BBE',
+                  padding: {
+                    top: 10,
+                    bottom: 30
+                }
                 }
               ]
             },
             options: {
-              responsive: true,
-              plugins: {
-                legend: {
-                  position: 'bottom' // Position legend at the bottom
-                },
-                title: {
-                  display: true,
-                  text: 'ข้อมูลจำนวนนิสิต'
-                }
-              },
-              scales: {
-                y: {
-                  beginAtZero: true
-                }
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom', // Position legend at the bottom
+            labels: {
+              font: {
+                size: 16 // 🔥 ปรับขนาดฟอนต์ของ legend
               }
             }
+          },
+          title: {
+            display: true,
+            text: 'ข้อมูลจำนวนนิสิต',
+            font: {
+              size: 14 // 🔥 ปรับขนาดฟอนต์ของ title
+            }
+          }
+        },
+        scales: {
+          x: {
+            ticks: {
+              font: {
+                size: 16 // 🔥 ปรับขนาดฟอนต์ของ labels บนแกน X
+              }
+            }
+          },
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: function(value) {
+                return Math.floor(value); // 🔥 ปัดค่าทศนิยมออก
+              },
+              font: {
+                size: 14 // 🔥 ปรับขนาดฟอนต์ของ labels บนแกน Y
+              }
+            }
+          }
+        }
+      }
           });
         })
         .catch(error => {
@@ -345,67 +373,90 @@
 
 // สร้างข้อมูลที่ต้องการแสดงในกราฟ
 fetch('http://localhost:3000/daysroom')
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  })
+  .then(data => {
+    console.log("Fetched Data:", data); // 🛠 Debug: ดูข้อมูล API
+
+    const barCtx2 = document.getElementById('barChart2').getContext('2d');
+    if (!barCtx2) {
+      console.error("Canvas element not found!");
+      return;
+    }
+
+    // Prepare data for the Chart.js chart after fetching
+    const labels2 = data.map(item => item.DayName);
+    const totalCount2 = data.map(item => item.TotalCount);
+    const csCount2 = data.map(item => item.Cs);
+    const itCount2 = data.map(item => item.It);
+
+    new Chart(barCtx2, {
+      type: 'bar',
+      data: {
+        labels: labels2,
+        datasets: [
+          {
+            label: 'จำนวนนิสิต สาขา วิทยาการคอมฯ',
+            data: csCount2,
+            backgroundColor: '#E54715'
+          },
+          {
+            label: 'จำนวนนิสิต สาขาเทคโนโลยีฯ',
+            data: itCount2,
+            backgroundColor: '#622BBE'
           }
-          return response.json();
-        })
-        .then(data => {
-          console.log("Fetched Data:", data); // 🛠 Debug: ดูข้อมูล API
-
-          const barCtx2 = document.getElementById('barChart2').getContext('2d');
-          if (!barCtx2) {
-            console.error("Canvas element not found!");
-            return;
-          }
-
-          // Prepare data for the Chart.js chart after fetching
-          const labels2 = data.map(item => item.day_of_week);
-          const totalCount2 = data.map(item => item.count);
-          const csCount2 = data.map(item => item.cs  );
-          const itCount2 = data.map(item => item.it );
-
-          new Chart(barCtx2, {
-            type: 'bar',
-            data: {
-              labels: labels2,
-              datasets: [
-               
-                {
-                  label: 'จำนวนนิสิต สาขา วิทยาการคอมฯ',
-                  data: csCount2,
-                  backgroundColor: '#E54715'
-                },
-                {
-                  label: 'จำนวนนิสิต สาขาเทคโนโลยีฯ',
-                  data: itCount2,
-                  backgroundColor: '#622BBE'
-                }
-              ]
-            },
-            options: {
-              responsive: true,
-              plugins: {
-                legend: {
-                  position: 'bottom' // Position legend at the bottom
-                },
-                title: {
-                  display: true,
-                  text: 'ข้อมูลจำนวนนิสิต'
-                }
-              },
-              scales: {
-                y: {
-                  beginAtZero: true
-                }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom', // Position legend at the bottom
+            labels: {
+              font: {
+                size: 20 // 🔥 ปรับขนาดฟอนต์ของ legend
               }
             }
-          });
-        })
-        .catch(error => {
-          console.error('Error fetching data:', error);
-        });
+          },
+          title: {
+            display: true,
+            text: 'ข้อมูลจำนวนนิสิต',
+            font: {
+              size: 16 // 🔥 ปรับขนาดฟอนต์ของ title
+            }
+          }
+        },
+        scales: {
+          x: {
+            ticks: {
+              font: {
+                size: 16 // 🔥 ปรับขนาดฟอนต์ของ labels บนแกน X
+              }
+            }
+          },
+          y: {
+            beginAtZero: true,
+            ticks: {
+              callback: function(value) {
+                return Math.floor(value); // 🔥 ปัดค่าทศนิยมออก
+              },
+              font: {
+                size: 16 // 🔥 ปรับขนาดฟอนต์ของ labels บนแกน Y
+              }
+            }
+          }
+        }
+      }
+    });
+  })
+  .catch(error => {
+    console.error('Error fetching data:', error);
+  });
+
          // ดึงข้อมูลจาก API
          fetch("http://localhost:3000/useralldata")
             .then(response => response.json()) // แปลงเป็น JSON
