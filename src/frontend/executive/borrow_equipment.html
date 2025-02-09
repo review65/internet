@@ -125,45 +125,34 @@
         </ul>
       </div>
     </div>
-        <table>
-            <tr>
-              <td>
-                <select>
-                    <option value="Equipment">Equipment</option>
-                    <option value="mic">ไมค์</option>
-                    <option value="powerplug">ปลั๊กไฟ</option>
-                    <option value="pointer">pointer</option>
-                </select>
-            </td>
-                <td>ชื่อห้อง</td>
-                <td>จำนวนอุปกรณ์</td>
-                <td>จำนวนครั้งที่ยืม</td>
-                
-            </tr>
-        </table>
-        <hr>
-        <table>
-            <tr>
-                <td>ไมค์</td>
-                <td>SC2-211</td>
-                <td>5</td>
-                <td>30</td>
-                
-            </tr>
-            <tr>
-              <td>ปลั๊กไฟ</td>
-              <td>SC2-211</td>
-              <td>5</td>
-              <td>20</td>
-            </tr>
-            <tr>
-              <td>pointer</td>
-              <td>SC2-211</td>
-              <td>3</td>
-              <td>10</td>
-            </tr>
-            
-        </table>
+    <table>
+      <tr>
+          <td>
+              <select id="equipmentFilter">
+                  <option value="">All Equipment</option>
+                  <option value="ไมค์">คอมพิวเตอร์</option>
+                  <option value="ปลั๊กไฟ">จอคอมพิวเตอร์</option>
+                  <option value="pointer">เก้าอี้</option>
+                  <option value="pointer">เม้าส์</option>
+                  <option value="pointer">โปรเจคเตอร์</option>
+              </select>
+          </td>
+          <td>ชื่อห้อง</td>
+          <td>จำนวนอุปกรณ์</td>
+          <td>จำนวนครั้งที่ยืม</td>
+      </tr>
+  </table>
+
+  <hr>
+
+  <table id="equipmentTable">
+      <tr>
+          <th>อุปกรณ์</th>
+          <th>ชื่อห้อง</th>
+          <th>จำนวนอุปกรณ์</th>
+          <th>จำนวนครั้งที่ยืม</th>
+      </tr>
+  </table>
         <button onclick="window.location.href='alldata.html'">BACK</button>
     </div>
 </body>
@@ -233,6 +222,30 @@
       popup.style.display = "none"; // ปิด Popup หลังจากเลือกตัวกรอง
     });
   });
-  
+  async function fetchEquipmentData() {
+            try {
+                const response = await fetch("http://localhost:3000/TableBorrowEquipment");
+                const data = await response.json();
+                
+                const table = document.getElementById("equipmentTable");
+                table.innerHTML = "";
+
+                data.forEach(item => {
+                    const row = `
+                        <tr>
+                            <td>${item.equipmentname}</td>
+                            <td>${item.roomname}</td>
+                            <td>${item.Equipments_amount}</td>
+                            <td>${item.total_borrowed_times}</td>
+                        </tr>
+                    `;
+                    table.innerHTML += row;
+                });
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", fetchEquipmentData);
   </script>
 </html>
