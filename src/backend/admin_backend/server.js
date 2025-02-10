@@ -8,11 +8,13 @@ app.use(cors()); // Allow frontend to access API
 
 // 📌 Whitelist allowed tables to prevent SQL injection
 const allowedTables = [
-    'Rooms_list_requests', 'Equipments_list_brokened', 'Admin_information',
-    'Equipments_list_requests', 'Executive_information', 'Manage_computers',
-    'Manage_equipments', 'Name_list_requests_rooms', 'Rooms_list_information',
-    'Schedule_time', 'Student_information', 'Teacher_information', 'Equipments_list_information'
+    'Admin_information', 'Computer_list_requests', 'Equipments_list_brokened',
+    'Equipments_list_information', 'Equipments_list_requests', 'Executive_information',
+    'Manage_computers', 'Manage_equipments', 'Name_list_requests_rooms', 
+    'Rooms_list_information','Rooms_list_requests', 'Rooms_schedule_time', 
+    'Student_information', 'Teacher_information', 'Users_accounts'
 ];
+
 
 // 📌 Dynamic Route for fetching any table data
 app.get('/data/:table', (req, res) => {
@@ -38,7 +40,7 @@ app.post('/updateStatus', (req, res) => {
     const { requestId, status } = req.body;
 
     const sql = 'UPDATE Rooms_list_requests SET Requests_status = ? WHERE Rooms_requests_ID = ?';
-    
+
     connection.query(sql, [status, requestId], (err, results) => {
         if (err) {
             console.error('❌ Error updating status:', err);
@@ -57,16 +59,24 @@ app.post('/updateStatus', (req, res) => {
 
 app.post('/updateScheduleStatus', (req, res) => {
     const { scheduleId, status } = req.body;
+    console.log('Incoming request:', req.body); // Debugging log
 
-    const sql = `UPDATE Schedule_time SET Rooms_status = ? WHERE Schedule_ID = ?`;
-    connection.query(sql, [status, scheduleId], (err, result) => {
+    if (!scheduleId) {
+        return res.status(400).json({ message: 'Missing schedule ID' });
+    }
+
+    const query = 'UPDATE Rooms_schedule_time SET Rooms_status = ? WHERE Schedule_time_ID = ?';
+
+    connection.query(query, [status, scheduleId], (err, result) => {
         if (err) {
-            console.error('❌ Error updating schedule status:', err);
-            return res.status(500).json({ message: 'Failed to update status' });
+            console.error(err);
+            return res.status(500).json({ message: 'Failed to update status', error: err.message });
         }
         res.status(200).json({ message: 'Status updated successfully' });
     });
 });
+
+
 
 
 // 📌 Start Server
