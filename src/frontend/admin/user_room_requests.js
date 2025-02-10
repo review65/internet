@@ -17,7 +17,7 @@ async function fetchData() {
             const student = studentsData.find(s => s.Student_ID === room.Identify_ID) || {};
             return {
                 ...room,
-                email: student.email || '-',
+                email: student.Email || '-',
                 Name: student.Name || '-',
             };
         });

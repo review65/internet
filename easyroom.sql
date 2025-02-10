@@ -901,8 +901,9 @@ ALTER TABLE `Rooms_list_requests`
 --
 -- Constraints for table `Rooms_schedule_time`
 --
-ALTER TABLE `Rooms_schedule_time`
-  ADD CONSTRAINT `Rooms_schedule_time_ibfk_1` FOREIGN KEY (`Rooms_ID`) REFERENCES `Rooms_list_information` (`Rooms_ID`);
+ALTER TABLE Rooms_schedule_time
+  MODIFY Rooms_status ENUM('มีเรียน', 'ว่าง', 'ไม่ว่าง', 'กำลังปรับปรุง'),
+  ADD CONSTRAINT Rooms_schedule_time_ibfk_1 FOREIGN KEY (Rooms_ID) REFERENCES Rooms_list_information (Rooms_ID);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

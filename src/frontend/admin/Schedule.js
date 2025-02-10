@@ -1,6 +1,6 @@
 async function fetchSchedule() {
     try {
-        const response = await fetch(`http://localhost:3000/data/Schedule_time`);
+        const response = await fetch(`http://localhost:3000/data/Rooms_schedule_time`);
         const scheduleData = await response.json();
 
         const dayMapping = {
@@ -13,67 +13,55 @@ async function fetchSchedule() {
             'อาทิตย์': 7
         };
 
-        // ตั้งค่าตาราง
+        // ตั้งค่าตารางและเตรียมเซลล์
         for (let i = 1; i <= 7; i++) {
-            for (let j = 2; j <= 14; j++) {  // คอลัมน์เริ่มต้นที่ 2 (08:00 น.)
+            for (let j = 2; j <= 14; j++) {
                 const cell = document.querySelector(`tbody tr:nth-child(${i}) td:nth-child(${j})`);
                 if (cell) {
                     cell.classList.add('status-cell');
-                    cell.setAttribute('data-status', 'ว่าง');  // ตั้งค่าเริ่มต้นเป็นว่าง
+                    cell.setAttribute('data-status', 'ว่าง'); // ค่าเริ่มต้น
                     updateCellAppearance(cell);
-
-                    // เพิ่ม event สำหรับคลิกเพื่อเปลี่ยนสถานะ
                     cell.addEventListener('click', () => changeStatus(cell));
                 }
             }
         }
 
-        // เติมข้อมูลจากฐานข้อมูล
+        // กำหนดค่า roomsFilter ตามหน้า HTML
         let roomsFilter = '';
-
-        if (window.location.pathname.includes('Schedule307.html')) {
-            roomsFilter = '307';
-        } else if (window.location.pathname.includes('Schedule308.html')) {
-            roomsFilter = '308';
-        } else if(window.location.pathname.includes('Schedule414.html')){
-            roomsFilter = '414';
-        } else if(window.location.pathname.includes('Schedule407.html')){
-            roomsFilter = '407';
-        } else if(window.location.pathname.includes('Schedule411.html')){
-            roomsFilter = '411';
-        } else if(window.location.pathname.includes('Schedule415.html')){
-            roomsFilter = '415';
-        } else if(window.location.pathname.includes('Schedule314.html')){
-            roomsFilter = '314';
-        } else if(window.location.pathname.includes('Schedule313-1.html')){
-            roomsFilter = '313-1';
-        } else if(window.location.pathname.includes('Schedule313.html')){
-            roomsFilter = '313';
-        } else if(window.location.pathname.includes('Schedule211.html')){
-            roomsFilter = '211';
-        } else if(window.location.pathname.includes('Schedule212.html')){
-            roomsFilter = '212';
-        } else if(window.location.pathname.includes('Schedule311.html')){
-            roomsFilter = '311';
-        }
+        const pathname = window.location.pathname;
+        if (pathname.includes('Schedule307.html')) roomsFilter = '307';
+        else if (pathname.includes('Schedule308.html')) roomsFilter = '308';
+        else if (pathname.includes('Schedule414.html')) roomsFilter = '414';
+        else if (pathname.includes('Schedule407.html')) roomsFilter = '407';
+        else if (pathname.includes('Schedule411.html')) roomsFilter = '411';
+        else if (pathname.includes('Schedule415.html')) roomsFilter = '415';
+        else if (pathname.includes('Schedule314.html')) roomsFilter = '314';
+        else if (pathname.includes('Schedule313-1.html')) roomsFilter = '313-1';
+        else if (pathname.includes('Schedule313.html')) roomsFilter = '313';
+        else if (pathname.includes('Schedule211.html')) roomsFilter = '211';
+        else if (pathname.includes('Schedule212.html')) roomsFilter = '212';
+        else if (pathname.includes('Schedule311.html')) roomsFilter = '311';
 
         // เติมข้อมูลจากฐานข้อมูล
         scheduleData
-            .filter(item => item.Rooms_ID === roomsFilter)
-            .forEach(item => {
-                const dayIndex = dayMapping[item.Week_days];
-                const startHour = parseInt(item.Start_time.split(':')[0], 10);
-                const endHour = parseInt(item.End_time.split(':')[0], 10);
+    .filter(item => item.Rooms_ID === roomsFilter)
+    .forEach(item => {
+        console.log('✅ Item found:', item);
+        const dayIndex = dayMapping[item.Week_days];
+        const startHour = parseInt(item.Start_time.split(':')[0], 10);
+        const endHour = parseInt(item.End_time.split(':')[0], 10);
 
-                for (let hour = startHour; hour < endHour; hour++) {
-                    const cell = document.querySelector(`tbody tr:nth-child(${dayIndex}) td:nth-child(${hour - 8 + 2})`);
-                    if (cell) {
-                        cell.setAttribute('data-status', item.Rooms_status);
-                        cell.setAttribute('data-id', item.Schedule_ID); // ใส่ Schedule_ID สำหรับอัปเดต
-                        updateCellAppearance(cell);
-                    }
-                }
-            });
+        for (let hour = startHour; hour < endHour; hour++) {
+            const cell = document.querySelector(`tbody tr:nth-child(${dayIndex}) td:nth-child(${hour - 8 + 2})`);
+            if (cell) {
+                cell.setAttribute('data-id', item.Schedule_time_ID || 'none');  // Use Schedule_time_ID
+                cell.setAttribute('data-status', item.Rooms_status);
+                updateCellAppearance(cell);
+            } else {
+                console.warn(`⚠️ Cell not found for dayIndex: ${dayIndex}, hour: ${hour}`);
+            }
+        }
+    });
     } catch (error) {
         console.error('❌ Error fetching schedule:', error);
     }
@@ -83,34 +71,34 @@ async function fetchSchedule() {
 async function changeStatus(cell) {
     const statuses = ['ว่าง', 'มีเรียน', 'ไม่ว่าง', 'กำลังปรับปรุง'];
     let currentStatus = cell.getAttribute('data-status');
-    let nextStatus = statuses[(statuses.indexOf(currentStatus) + 1) % statuses.length]; // วนลูปสถานะ
+    let nextStatus = statuses[(statuses.indexOf(currentStatus) + 1) % statuses.length];
 
     cell.setAttribute('data-status', nextStatus);
-    updateCellAppearance(cell); // อัปเดต UI
+    updateCellAppearance(cell);
 
     try {
         const scheduleId = cell.getAttribute('data-id');
-        if (scheduleId) {
-            // อัปเดตสถานะในฐานข้อมูลเฉพาะเซลล์ที่มี Schedule_ID
-            const response = await fetch('http://localhost:3000/updateScheduleStatus', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    scheduleId: scheduleId,
-                    status: nextStatus
-                }),
-            });
+        if (!scheduleId || scheduleId === 'none') {
+            console.log('📝 Schedule ID is missing or not set, skipping update.');
+            return;
+        }
 
-            if (response.ok) {
-                console.log(`✅ อัปเดตสถานะเป็น "${nextStatus}" สำเร็จ!`);
-            } else {
-                console.error('❌ Error updating status');
-                alert('เกิดข้อผิดพลาดในการอัปเดตสถานะ');
-            }
+        const response = await fetch('http://localhost:3000/updateScheduleStatus', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                scheduleId: scheduleId,
+                status: nextStatus
+            }),
+        });
+
+        if (response.ok) {
+            console.log(`✅ อัปเดตสถานะเป็น "${nextStatus}" สำเร็จ!`);
         } else {
-            console.log('📝 เซลล์ว่าง ยังไม่มีข้อมูลในฐานข้อมูล');
+            console.error('❌ Error updating status');
+            alert('เกิดข้อผิดพลาดในการอัปเดตสถานะ');
         }
     } catch (error) {
         console.error('❌ Error:', error);
@@ -121,7 +109,7 @@ async function changeStatus(cell) {
 // 🎨 ฟังก์ชันอัปเดต UI ของเซลล์ตามสถานะ
 function updateCellAppearance(cell) {
     const status = cell.getAttribute('data-status');
-    cell.className = 'status-cell'; // ล้าง class เดิมก่อน
+    cell.className = 'status-cell'; // ล้าง class เดิม
     switch (status) {
         case 'มีเรียน':
             cell.classList.add('status-occupied');
