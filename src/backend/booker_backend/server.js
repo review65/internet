@@ -16,18 +16,18 @@ app.use(express.json()); // รองรับ JSON request body
 app.use(cors()); // อนุญาตให้เว็บอื่นเรียกใช้ API ได้
 
 // 📌 ดึงข้อมูลตารางเรียน
-app.get("/getSchedule", async (req, res) => {
-    try {
-        // คิวรีข้อมูลจากตาราง Schedule_time
-        const [results] = await connection.promise().query("SELECT * FROM Schedule_time");
+// app.get("/getSchedule", async (req, res) => {
+//     try {
+//         // คิวรีข้อมูลจากตาราง Schedule_time
+//         const [results] = await connection.promise().query("SELECT * FROM Schedule_time");
 
-        console.log("✅ ดึงข้อมูลสำเร็จ:", results.length);
-        res.json(results); // ส่งข้อมูลกลับไปในรูปแบบ JSON
-    } catch (err) {
-        console.error("❌ เกิดข้อผิดพลาด:", err);
-        res.status(500).json({ error: "ดึงข้อมูลล้มเหลว" });
-    }
-});
+//         console.log("✅ ดึงข้อมูลสำเร็จ:", results.length);
+//         res.json(results); // ส่งข้อมูลกลับไปในรูปแบบ JSON
+//     } catch (err) {
+//         console.error("❌ เกิดข้อผิดพลาด:", err);
+//         res.status(500).json({ error: "ดึงข้อมูลล้มเหลว" });
+//     }
+// });
 
 
 // 📌 จองห้องเรียน
@@ -141,7 +141,17 @@ app.get("/getSchedule", async (req, res) => {
 //     });
 // });
 // app.get('/roomdetail', (req, res) => {
-//     const query ="SELECT rli.Rooms_name AS Name,rli.Floors, rli.Rooms_ID, SUM(CASE WHEN rlr.Requests_status = 'อนุมัติ' THEN 1 ELSE 0 END) AS Approved_Count FROM Rooms_list_information rli LEFT JOIN Rooms_list_requests rlr ON rli.Rooms_ID = rlr.Rooms_ID GROUP BY rli.Rooms_ID, rli.Rooms_name, rli.Floors ORDER BY Approved_Count DESC;"
+//     const query =`
+//         SELECT 
+//             rli.Rooms_name AS Name,
+//             rli.Floors, 
+//             rli.Rooms_ID, 
+//             SUM(CASE WHEN rlr.Requests_status = 'อนุมัติ' THEN 1 ELSE 0 END) AS Approved_Count 
+//         FROM Rooms_list_information rli 
+//         LEFT JOIN Rooms_list_requests rlr ON rli.Rooms_ID = rlr.Rooms_ID 
+//         GROUP BY rli.Rooms_ID, rli.Rooms_name, rli.Floors 
+//         ORDER BY Approved_Count DESC;
+//     `;
 //     connection.query( query,(err, results) => {
 //         if (err) {
 //             console.error('❌ เกิดข้อผิดพลาด:', err);
@@ -152,6 +162,29 @@ app.get("/getSchedule", async (req, res) => {
 //         res.json(results);
 //     });
 // });
+
+app.get('/Manage_computers', (req, res) => {
+    connection.query('SELECT * FROM Manage_computers', (err, results) => {
+        if (err) {
+            console.error('❌ Error:', err);
+            res.status(500).send(err);
+            return;
+        }
+        console.log('✅ ดึงข้อมูลสำเร็จจาก Rooms_list_requests:', results);
+        res.json(results);
+    });
+});
+app.get('/Equipments_list_information', (req, res) => {
+    connection.query('SELECT * FROM Teacher_information', (err, results) => {
+        if (err) {
+            console.error('❌ Error:', err);
+            res.status(500).send(err);
+            return;
+        }
+        console.log('✅ ดึงข้อมูลสำเร็จจาก Teacher_information:', results);
+        res.json(results);
+    });
+});
 
 // app.get('/Rooms_list_requests', (req, res) => {
 //     connection.query('SELECT * FROM Rooms_list_requests', (err, results) => {
