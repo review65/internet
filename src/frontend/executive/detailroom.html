@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student</title>
+    <title>DetailsRoom</title>
     <link rel="stylesheet" href="detailstyle.css">
     <!-- Bootstrap CSS -->
     <link
@@ -138,34 +138,16 @@
             </td>
                 <td>ชั้น</td>
                 <td>ห้อง</td>
-                <td>จำนวนนั้งสุทธิ</td>
+                <td>ประเภทห้อง</td>
                 <td>จำนวนการยืม</td>
             </tr>
         </table>
         <hr id="hr-line">
-        <table>
-            <tr>
-                <td>SC2-212</td>
-                <td>2</td>
-                <td>12</td>
-                <td>80</td>
-                <td>10</td>
-            </tr>
-            <tr>
-                <td>SC2-207</td>
-                <td>2</td>
-                <td>07</td>
-                <td>40</td>
-                <td>8</td>
-            </tr>
-            <tr>
-                <td>SC2-311</td>
-                <td>3</td>
-                <td>11</td>
-                <td>60</td>
-                <td>3</td>
-            </tr>
-        </table>
+      </table>
+
+      <table id="roomTable">
+          <!-- ข้อมูลจะถูกเพิ่มที่นี่ -->
+      </table>
         <button onclick="window.location.href='alldata.html'">BACK</button>
     </div>
 </body>
@@ -247,5 +229,45 @@ closePopupBtn.addEventListener("click", () => {
   document.getElementById("hr-line").classList.remove("hidden"); // แสดง <hr> อีกครั้ง
 });
 
+
+async function fetchRoomData() {
+            try {
+                const response = await fetch("http://localhost:3000/TableRoomBooked");
+                const data = await response.json();
+
+                const dropdown = document.getElementById("roomDropdown");
+                const table = document.getElementById("roomTable");
+
+                // เคลียร์ข้อมูลเก่า
+                dropdown.innerHTML = '<option value="allroom">room</option>';
+                table.innerHTML = "";
+
+                data.forEach(room => {
+                    if (room.Total_Book > 0) {  // แสดงเฉพาะห้องที่มีการจอง
+                        // เพิ่มตัวเลือกใน Dropdown
+                        let option = document.createElement("option");
+                        option.value = room.Rooms_name;
+                        option.textContent = room.Rooms_name;
+                        dropdown.appendChild(option);
+
+                        // สร้างแถวตาราง
+                        let row = document.createElement("tr");
+                        row.innerHTML = `
+                            <td>${room.Room}</td>
+                            <td>${room.Floor}</td>
+                            <td>${room.RoomID}</td>
+                            <td>${room.RoomType}</td>
+                            <td>${room.Total_Book}</td>
+                        `;
+                        table.appendChild(row);
+                    }
+                });
+            } catch (error) {
+                console.error("Error fetching room data:", error);
+            }
+        }
+
+        // โหลดข้อมูลเมื่อหน้าเว็บโหลดเสร็จ
+        document.addEventListener("DOMContentLoaded", fetchRoomData);
 </script>
 </html>

@@ -126,44 +126,35 @@
       </ul>
     </div>
   </div>
-        <table>
-            <tr>
-                <td><select>
-                  <option value="eqiup">Eqiup</option>
-                  <option value="projector">โปรเจกเตอร์</option>
-                  <option value="monitor">จอคอมพิวเตอร์</option>
-                  <option value="TV">TV</option>
-                </select></td>
-                <td>จำนวนอุปกรณ์</td>
-                <td>จำนวนอุปกรณ์ที่เสีย</td>
-                <td>จำนวนอุปกรณ์สุทธิ</td>
-                <td>จำนวนการยืมสุทธิ</td>
-            </tr>
-        </table>
-        <hr>
-        <table>
-            <tr>
-                <td>โปรเจกเตอร์</td>
-                <td>40</td>
-                <td>10</td>
-                <td>30</td>
-                <td>50</td>
-            </tr>
-            <tr>
-                <td>จอคอมพิวเตอร์</td>
-                <td>20</td>
-                <td>5</td>
-                <td>15</td>
-                <td>20</td>
-            </tr>
-            <tr>
-                <td>TV</td>
-                <td>5</td>
-                <td>0</td>
-                <td>5</td>
-                <td>30</td>
-            </tr>
-        </table>
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Equipment Data</title>
+  </head>
+  <body>
+      <table>
+          <tr>
+              <td>
+                  <select id="equipmentFilter" onchange="filterEquipment()">
+                      <option value="all">All</option>
+                      <option value="โปรเจคเตอร์">โปรเจคเตอร์</option>
+                      <option value="จอคอมพิวเตอร์">จอคอมพิวเตอร์</option>
+                      <option value="TV">TV</option>
+                  </select>
+              </td>
+              <td>ชื่อห้อง</td>
+              <td>จำนวนอุปกรณ์</td>
+              <td>จำนวนอุปกรณ์ที่เสีย</td>
+              <td>จำนวนอุปกรณ์สุทธิ</td>
+              <td>จำนวนการยืมสุทธิ</td>
+          </tr>
+      </table>
+      <hr>
+      <table id="equipmentTable">
+          <!-- Data will be inserted here -->
+      </table>
         <button onclick="window.location.href='alldata.html'">BACK</button>
     </div>
 </body>
@@ -233,6 +224,44 @@
       popup.style.display = "none"; // ปิด Popup หลังจากเลือกตัวกรอง
     });
   });
-  
+  async function fetchEquipmentData() {
+            try {
+                const response = await fetch('http://localhost:3000/DataEquipment');
+                const data = await response.json();
+                renderTable(data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        function renderTable(data) {
+            const table = document.getElementById("equipmentTable");
+            table.innerHTML = ""; // Clear old data
+            
+            data.forEach(item => {
+                const row = `<tr>
+                    <td>${item.EquipmentName}</td>
+                    <td>${item.Room}</td>
+                    <td>${item.Equipments_amount}</td>
+                    <td>${item.BrokenedEquipment}</td>
+                    <td>${item.Balance}</td>
+                    <td>${item.BorrowAmount}</td>
+                </tr>`;
+                table.innerHTML += row;
+            });
+        }
+
+        function filterEquipment() {
+            const filterValue = document.getElementById("equipmentFilter").value;
+            fetchEquipmentData().then(() => {
+                const rows = document.querySelectorAll("#equipmentTable tr");
+                rows.forEach(row => {
+                    const equipmentName = row.cells[0]?.textContent || "";
+                    row.style.display = (filterValue === "all" || equipmentName === filterValue) ? "" : "none";
+                });
+            });
+        }
+
+        fetchEquipmentData();
   </script>
 </html>
